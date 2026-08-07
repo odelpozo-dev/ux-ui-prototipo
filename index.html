@@ -6,13 +6,15 @@
 <title>Kaxis · Prototipo navegación mobile</title>
 <style>
   :root{
-    --navy:#0F2A3D;
-    --navy-soft:#1C3E54;
-    --teal:#0FB88A;
-    --teal-dark:#0A9670;
+    --navy:#173A66;
+    --navy-soft:#1968E5;
+    --blue:#1968E5;
+    --blue-dark:#1354BD;
+    --teal:#12B5A6;
+    --teal-dark:#0C9E90;
     --bg:#F5F7F7;
     --card:#FFFFFF;
-    --line:#E4E8E8;
+    --line:#E4E8EC;
     --text:#16242C;
     --text-mute:#6B7A80;
     --amber:#F2A93B;
@@ -104,13 +106,14 @@
   }
 
   .topbar{
-    background:var(--navy);
-    color:#fff;
-    padding:34px 16px 12px;
+    background:#fff;
+    color:var(--text);
+    padding:34px 16px 14px;
     display:flex;
     align-items:center;
     justify-content:space-between;
     flex-shrink:0;
+    border-bottom:1px solid var(--line);
   }
   .topbar-left{
     display:flex;
@@ -121,37 +124,41 @@
     font-size:15px;
     font-weight:700;
     letter-spacing:0.02em;
+    color:var(--text);
   }
-  .brand span{color:var(--teal);}
+  .brand span{color:var(--blue);}
   .topbar-sub{
     font-size:10px;
-    color:#9FB4C0;
+    color:var(--text-mute);
     margin-top:1px;
   }
   .icon-btn{
     width:30px;height:30px;
     display:flex;align-items:center;justify-content:center;
-    color:#fff;
-    opacity:0.9;
+    color:var(--text);
+    opacity:0.85;
   }
 
   .order-strip{
-    background:var(--navy-soft);
-    color:#fff;
-    padding:8px 16px;
+    background:#fff;
+    color:var(--text);
+    padding:10px 16px 10px 13px;
     display:flex;
     align-items:center;
     justify-content:space-between;
     font-size:11.5px;
     flex-shrink:0;
+    border-left:3px solid var(--teal);
+    border-bottom:1px solid var(--line);
   }
   .order-strip .badge{
-    background:var(--amber);
-    color:#3A2A05;
+    background:#E4F4F2;
+    color:var(--teal-dark);
     font-weight:700;
     font-size:10px;
-    padding:2px 8px;
+    padding:2px 9px;
     border-radius:20px;
+    border:1px solid #BFE6DF;
   }
 
   .content{
@@ -177,6 +184,25 @@
     font-weight:700;
     margin:0 0 10px;
   }
+  .card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .card-head .card-title{margin:0;}
+  .edit-btn{
+    width:26px;height:26px;
+    border-radius:50%;
+    background:#EAF1FD;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--blue);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .edit-btn svg{width:13px;height:13px;}
   .row{
     display:flex;
     justify-content:space-between;
@@ -194,13 +220,11 @@
   .worklist .job-price{font-weight:700;font-size:13px;}
 
   .total-card{
-    background:var(--navy);
-    color:#fff;
-    border:none;
+    background:#fff;
   }
-  .total-card .row{border-bottom:1px solid rgba(255,255,255,0.12);}
-  .total-card .row .label{color:#A9BCC5;}
-  .total-card .row.grand .val{color:var(--teal);font-size:17px;}
+  .total-card .row.grand{padding-top:10px;}
+  .total-card .row.grand .val{color:var(--text);font-size:17px;font-weight:800;}
+  .total-card .row.grand .label{color:var(--text);font-weight:700;}
 
   .pay-pill{
     background:#E7F8F1;
@@ -270,7 +294,7 @@
     bottom:18px;
     left:50%;
     transform:translateX(-50%);
-    background:var(--navy);
+    background:var(--teal);
     color:#fff;
     border:none;
     border-radius:30px;
@@ -280,7 +304,7 @@
     display:flex;
     align-items:center;
     gap:7px;
-    box-shadow:0 8px 20px rgba(15,42,61,0.35);
+    box-shadow:0 8px 20px rgba(12,181,166,0.35);
     z-index:40;
   }
   .sheet-overlay{
@@ -320,7 +344,7 @@
     font-weight:600;
     cursor:pointer;
   }
-  .sheet-item.active{background:#E7F8F1;color:var(--teal-dark);}
+  .sheet-item.active{background:#E4F4F2;color:var(--teal-dark);}
   .sheet-item svg{width:19px;height:19px;flex-shrink:0;}
   .sheet-divider{height:1px;background:var(--line);margin:8px 0;}
   .sheet-actions{display:flex;gap:8px;padding:0 4px;}
@@ -332,7 +356,7 @@
     text-align:center;
     font-size:11px;
     font-weight:600;
-    color:var(--navy);
+    color:var(--teal-dark);
     display:flex;flex-direction:column;align-items:center;gap:4px;
   }
 
@@ -360,9 +384,9 @@
     cursor:pointer;
   }
   .tab.active{
-    background:var(--navy);
+    background:var(--teal);
     color:#fff;
-    border-color:var(--navy);
+    border-color:var(--teal);
   }
 
   .subtabs{
@@ -384,9 +408,9 @@
     cursor:pointer;
   }
   .subtab.active{
-    background:#fff;
-    color:var(--navy);
-    box-shadow:0 1px 3px rgba(15,42,61,0.12);
+    background:var(--blue);
+    color:#fff;
+    box-shadow:0 2px 6px rgba(25,104,229,0.25);
   }
   .subtab .count{
     display:inline-block;
@@ -395,6 +419,42 @@
     color:var(--text-mute);
   }
   .subtab.active .count{color:var(--teal-dark);}
+
+  .fuel-block{padding:7px 0 4px;}
+  .fuel-label{color:var(--text-mute);font-size:13px;margin-bottom:10px;}
+  .fuel-track{
+    height:5px;
+    background:linear-gradient(90deg, var(--teal) 0%, var(--teal) var(--fuel-pct,50%), #E4E8EC var(--fuel-pct,50%), #E4E8EC 100%);
+    border-radius:4px;
+    position:relative;
+    margin:0 9px 8px;
+  }
+  .fuel-track::after{
+    content:'';
+    position:absolute;
+    top:50%;
+    left:var(--fuel-pct,50%);
+    width:16px;height:16px;
+    background:#fff;
+    border:3px solid var(--teal);
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    box-shadow:0 1px 3px rgba(0,0,0,0.15);
+  }
+  .fuel-ticks{
+    display:flex;
+    justify-content:space-between;
+    font-size:10.5px;
+    color:var(--text-mute);
+    padding:0 2px;
+  }
+  .fuel-value{
+    text-align:center;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--text);
+    margin-top:4px;
+  }
 
   .caption{
     max-width:360px;
@@ -496,6 +556,8 @@
 <div class="caption" id="caption"></div>
 
 <script>
+const EDIT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg>';
+
 const ICONS = {
   cliente: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
   vehiculo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17a2 2 0 01-2-2v-3l2-5h10l3 5v3a2 2 0 01-2 2M5 17h14"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>',
@@ -516,7 +578,10 @@ function renderContent(key){
   if(key==='cliente'){
     return `
       <div class="card">
-        <div class="card-title">Datos del cliente</div>
+        <div class="card-head">
+          <div class="card-title">Datos del cliente</div>
+          <div class="edit-btn">${EDIT_ICON}</div>
+        </div>
         <div class="row"><span class="label">Nombre</span><span class="val">Raúl</span></div>
         <div class="row"><span class="label">Teléfono</span><span class="val">+56 8 7463 6398</span></div>
         <div class="row"><span class="label">Documento</span><span class="val">PDF / WhatsApp</span></div>
@@ -529,7 +594,10 @@ function renderContent(key){
   if(key==='vehiculo'){
     return `
       <div class="card">
-        <div class="card-title">Datos del vehículo</div>
+        <div class="card-head">
+          <div class="card-title">Datos del vehículo</div>
+          <div class="edit-btn">${EDIT_ICON}</div>
+        </div>
         <div class="row"><span class="label">Patente</span><span class="val">WR1106</span></div>
         <div class="row"><span class="label">Marca</span><span class="val">Nissan</span></div>
         <div class="row"><span class="label">Año</span><span class="val">2007</span></div>
@@ -538,11 +606,19 @@ function renderContent(key){
         <div class="row"><span class="label">Combustible</span><span class="val">Diésel</span></div>
       </div>
       <div class="card">
-        <div class="card-title">Recepción del vehículo</div>
+        <div class="card-head">
+          <div class="card-title">Recepción del vehículo</div>
+          <div class="edit-btn">${EDIT_ICON}</div>
+        </div>
         <div class="row"><span class="label">Kilometraje</span><span class="val">56.000</span></div>
         <div class="row"><span class="label">Luz Check Engine</span><span class="val">Encendida</span></div>
         <div class="row"><span class="label">Luz servicio</span><span class="val">Encendida</span></div>
-        <div class="row"><span class="label">Nivel combustible</span><span class="val">1/2</span></div>
+        <div class="fuel-block">
+          <div class="fuel-label">Nivel combustible</div>
+          <div class="fuel-track" style="--fuel-pct:50%;"></div>
+          <div class="fuel-ticks"><span>Vacío</span><span>1/4</span><span>1/2</span><span>3/4</span><span>Lleno</span></div>
+          <div class="fuel-value">1/2</div>
+        </div>
       </div>`;
   }
   if(key==='trabajos'){
@@ -561,11 +637,11 @@ function renderContent(key){
     return `
       <div class="subtabs" id="workSubtabs">
         <div class="subtab ${workTab==='mano'?'active':''}" data-w="mano">Mano de obra<span class="count">(4)</span></div>
-        <div class="subtab ${workTab==='repuestos'?'active':''}" data-w="repuestos">Repuestos<span class="count">(2)</span></div>
+        <div class="subtab ${workTab==='repuestos'?'active':''}" data-w="repuestos">Repuestos<span class="count">(1)</span></div>
       </div>
       ${workTab==='mano' ? manoObra : repuestos}
       <div class="card total-card">
-        <div class="card-title" style="color:#A9BCC5;">Totales</div>
+        <div class="card-title">Totales</div>
         <div class="row"><span class="label">Subtotal trabajos</span><span class="val">$45.000</span></div>
         <div class="row"><span class="label">Subtotal repuestos</span><span class="val">$20.000</span></div>
         <div class="row grand"><span class="label">Total orden</span><span class="val">$77.350</span></div>
@@ -657,6 +733,16 @@ function render(){
       t.addEventListener('click',()=>{workTab=t.dataset.w; render();});
     });
   }
+
+  document.querySelectorAll('.edit-btn').forEach(btn=>{
+    btn.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const card = btn.closest('.card');
+      card.style.outline = '2px solid var(--blue)';
+      card.style.outlineOffset = '2px';
+      setTimeout(()=>{ card.style.outline = 'none'; }, 500);
+    });
+  });
   document.getElementById('caption').innerHTML = `<b>${SECTIONS.find(s=>s.key===activeSection).label}</b> — ${CAPTIONS[pattern]}`;
 
   document.getElementById('bottomnav').style.display = pattern==='A' ? 'flex':'none';
