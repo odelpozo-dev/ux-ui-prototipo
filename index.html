@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaxis · Prototipo navegación mobile</title>
+    <style>
+        :root {
+            --navy: #0F2A3D;
+            --navy-soft: #1C3E54;
+            --teal: #0FB88A;
+            --teal-dark: #0A9670;
+            --bg: #F5F7F7;
+            --card: #FFFFFF;
+            --line: #E4E8E8;
+            --text: #16242C;
+            --text-mute: #6B7A80;
+            --amber: #F2A93B;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(180deg, #EEF2F2 0%, #E4EAEA 100%);
+            color: var(--text);
+            padding: 32px 16px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .intro {
+            max-width: 560px;
+            text-align: center;
+        }
+
+        .intro h1 {
+            font-size: 20px;
+            margin: 0 0 6px;
+            letter-spacing: -0.01em;
+        }
+
+        .intro p {
+            margin: 0;
+            font-size: 13.5px;
+            color: var(--text-mute);
+            line-height: 1.5;
+        }
+
+        .switcher {
+            display: flex;
+            gap: 6px;
+            background: var(--card);
+            padding: 5px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            box-shadow: 0 1px 2px rgba(15, 42, 61, 0.05);
+        }
+
+        .switcher button {
+            border: none;
+            background: transparent;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-mute);
+            cursor: pointer;
+            transition: all .15s ease;
+            white-space: nowrap;
+        }
+
+        .switcher button.active {
+            background: var(--navy);
+            color: #fff;
+        }
+
+        .phone {
+            width: 360px;
+            height: 720px;
+            background: #000;
+            border-radius: 42px;
+            padding: 12px;
+            box-shadow: 0 20px 50px rgba(15, 42, 61, 0.25), 0 2px 6px rgba(15, 42, 61, 0.15);
+            position: relative;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notch {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 20px;
+            background: #000;
+            border-radius: 12px;
+            z-index: 50;
+        }
+
+        .topbar {
+            background: var(--navy);
+            color: #fff;
+            padding: 34px 16px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .brand span {
+            color: var(--teal);
+        }
+
+        .topbar-sub {
+            font-size: 10px;
+            color: #9FB4C0;
+            margin-top: 1px;
+        }
+
+        .icon-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            opacity: 0.9;
+        }
+
+        .order-strip {
+            background: var(--navy-soft);
+            color: #fff;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11.5px;
+            flex-shrink: 0;
+        }
+
+        .order-strip .badge {
+            background: var(--amber);
+            color: #3A2A05;
+            font-weight: 700;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 14px 90px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-mute);
+            font-weight: 700;
+            margin: 0 0 10px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid var(--line);
+            font-size: 13px;
+        }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+        .row .label {
+            color: var(--text-mute);
+        }
+
+        .row .val {
+            font-weight: 600;
+        }
+
+        .worklist .row {
+            align-items: center;
+        }
+
+        .worklist .job-name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .worklist .job-mec {
+            font-size: 11px;
+            color: var(--text-mute);
+            margin-top: 1px;
+        }
+
+        .worklist .job-price {
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .total-card {
+            background: var(--navy);
+            color: #fff;
+            border: none;
+        }
+
+        .total-card .row {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .total-card .row .label {
+            color: #A9BCC5;
+        }
+
+        .total-card .row.grand .val {
+            color: var(--teal);
+            font-size: 17px;
+        }
+
+        .pay-pill {
+            background: #E7F8F1;
+            border: 1px solid #BFE9D9;
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12.5px;
+            color: var(--teal-dark);
+            font-weight: 600;
+        }
+
+        .img-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .img-slot {
+            aspect-ratio: 1;
+            background: #EDF1F1;
+            border: 1.5px dashed #C7D1D1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9AAAAF;
+            font-size: 20px;
+        }
+
+        .empty-hint {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-mute);
+            font-size: 12.5px;
+        }
+
+        /* ---------- PATTERN A: Bottom nav icons ---------- */
+        .bottomnav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-top: 1px solid var(--line);
+            display: flex;
+            padding: 8px 4px 14px;
+            z-index: 40;
+        }
+
+        .bottomnav .bn-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: var(--text-mute);
+            font-size: 9.5px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        .bottomnav .bn-item.active {
+            color: var(--teal-dark);
+        }
+
+        .bottomnav .bn-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ---------- PATTERN B: bottom sheet ---------- */
+        .fab {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--navy);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 22px;
+            font-size: 12.5px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: 0 8px 20px rgba(15, 42, 61, 0.35);
+            z-index: 40;
+        }
+
+        .sheet-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 42, 61, 0.4);
+            z-index: 45;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s ease;
+        }
+
+        .sheet-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sheet {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            padding: 10px 14px 24px;
+            transform: translateY(100%);
+            transition: transform .25s cubic-bezier(.2, .8, .3, 1);
+            z-index: 46;
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .sheet.open {
+            transform: translateY(0);
+        }
+
+        .sheet-handle {
+            width: 36px;
+            height: 4px;
+            background: #D8DEDE;
+            border-radius: 4px;
+            margin: 0 auto 14px;
+        }
+
+        .sheet-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-mute);
+            font-weight: 700;
+            margin-bottom: 8px;
+            padding: 0 4px;
+        }
+
+        .sheet-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 8px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .sheet-item.active {
+            background: #E7F8F1;
+            color: var(--teal-dark);
+        }
+
+        .sheet-item svg {
+            width: 19px;
+            height: 19px;
+            flex-shrink: 0;
+        }
+
+        .sheet-divider {
+            height: 1px;
+            background: var(--line);
+            margin: 8px 0;
+        }
+
+        .sheet-actions {
+            display: flex;
+            gap: 8px;
+            padding: 0 4px;
+        }
+
+        .sheet-action {
+            flex: 1;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 10px 6px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* ---------- PATTERN C: scrollable tabs ---------- */
+        .tabbar {
+            display: flex;
+            gap: 6px;
+            padding: 10px 14px 8px;
+            overflow-x: auto;
+            flex-shrink: 0;
+            background: var(--bg);
+            scrollbar-width: none;
+        }
+
+        .tabbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            flex-shrink: 0;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: #fff;
+            border: 1px solid var(--line);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-mute);
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background: var(--navy);
+            color: #fff;
+            border-color: var(--navy);
+        }
+
+        .caption {
+            max-width: 360px;
+            text-align: center;
+            font-size: 12.5px;
+            color: var(--text-mute);
+            line-height: 1.5;
+        }
+
+        .caption b {
+            color: var(--text);
+        }
+
+        .tap-hint {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(15, 42, 61, 0.85);
+            color: #fff;
+            font-size: 9px;
+            padding: 3px 8px;
+            border-radius: 20px;
+            z-index: 41;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="intro">
+        <h1>Navegación mobile — 3 propuestas</h1>
+        <p>Mismo contenido de la orden de trabajo, tres formas de moverse entre secciones. Toca los controles dentro del
+            teléfono para probar cada una.</p>
+    </div>
+
+    <div class="switcher" id="switcher">
+        <button class="active" data-p="A">Bottom nav (íconos)</button>
+        <button data-p="B">Bottom sheet</button>
+        <button data-p="C">Tabs scrolleables</button>
+    </div>
+
+    <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+
+            <div class="topbar">
+                <div class="topbar-left">
+                    <div class="icon-btn" id="backIcon" title="Volver a Mis órdenes">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12" />
+                            <polyline points="12 19 5 12 12 5" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="brand">Top Racing AC · <span>KAXIS</span></div>
+                        <div class="topbar-sub">Orden #4821 · Mantención Kilometraje</div>
+                    </div>
+                </div>
+                <div class="icon-btn" id="menuIcon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <line x1="4" y1="7" x2="20" y2="7" />
+                        <line x1="4" y1="12" x2="20" y2="12" />
+                        <line x1="4" y1="17" x2="20" y2="17" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="order-strip">
+                <span>Raúl · WR1106 · Nissan Terrano</span>
+                <span class="badge">ABIERTA</span>
+            </div>
+
+            <!-- Pattern C tabbar (only visible in mode C) -->
+            <div class="tabbar" id="tabbar" style="display:none;"></div>
+
+            <div class="content" id="content"></div>
+
+            <!-- Pattern A -->
+            <div class="bottomnav" id="bottomnav" style="display:none;"></div>
+
+            <!-- Pattern B -->
+            <div class="sheet-overlay" id="sheetOverlay"></div>
+            <div class="sheet" id="sheet">
+                <div class="sheet-handle"></div>
+                <div class="sheet-title">Secciones</div>
+                <div id="sheetItems"></div>
+                <div class="sheet-divider"></div>
+                <div class="sheet-actions">
+                    <div class="sheet-action">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M17 2H7a2 2 0 00-2 2v16a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2z" />
+                        </svg>
+                        WhatsApp
+                    </div>
+                    <div class="sheet-action">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                            <path d="M14 2v6h6" />
+                        </svg>
+                        PDF
+                    </div>
+                    <div class="sheet-action">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="18" cy="5" r="3" />
+                            <circle cx="6" cy="12" r="3" />
+                            <circle cx="18" cy="19" r="3" />
+                            <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" />
+                            <line x1="15.4" y1="6.5" x2="8.6" y2="10.5" />
+                        </svg>
+                        Compartir
+                    </div>
+                </div>
+            </div>
+            <div class="fab" id="fabBtn" style="display:none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                Secciones
+            </div>
+
+        </div>
+    </div>
+
+    <div class="caption" id="caption"></div>
+
+    <script>
+        const ICONS = {
+            cliente: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+            vehiculo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17a2 2 0 01-2-2v-3l2-5h10l3 5v3a2 2 0 01-2 2M5 17h14"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>',
+            trabajos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 10-5.4 5.4L2 19l3 3 7.3-7.3a4 4 0 005.4-5.4z"/></svg>',
+            imagenes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
+            pagos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>'
+        };
+
+        const SECTIONS = [
+            { key: 'cliente', label: 'Cliente' },
+            { key: 'vehiculo', label: 'Vehículo' },
+            { key: 'trabajos', label: 'Trabajos' },
+            { key: 'imagenes', label: 'Imágenes' },
+            { key: 'pagos', label: 'Pagos' }
+        ];
+
+        function renderContent(key) {
+            if (key === 'cliente') {
+                return `
+      <div class="card">
+        <div class="card-title">Datos del cliente</div>
+        <div class="row"><span class="label">Nombre</span><span class="val">Raúl</span></div>
+        <div class="row"><span class="label">Teléfono</span><span class="val">+56 8 7463 6398</span></div>
+        <div class="row"><span class="label">Documento</span><span class="val">PDF / WhatsApp</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Descripción</div>
+        <div style="font-size:13px;color:var(--text-mute);line-height:1.5;">Revisar frenos</div>
+      </div>`;
+            }
+            if (key === 'vehiculo') {
+                return `
+      <div class="card">
+        <div class="card-title">Datos del vehículo</div>
+        <div class="row"><span class="label">Patente</span><span class="val">WR1106</span></div>
+        <div class="row"><span class="label">Marca</span><span class="val">Nissan</span></div>
+        <div class="row"><span class="label">Año</span><span class="val">2007</span></div>
+        <div class="row"><span class="label">Modelo</span><span class="val">Terrano</span></div>
+        <div class="row"><span class="label">VIN</span><span class="val">JN1CPGD22U0074293</span></div>
+        <div class="row"><span class="label">Combustible</span><span class="val">Diésel</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Recepción del vehículo</div>
+        <div class="row"><span class="label">Kilometraje</span><span class="val">56.000</span></div>
+        <div class="row"><span class="label">Luz Check Engine</span><span class="val">Encendida</span></div>
+        <div class="row"><span class="label">Luz servicio</span><span class="val">Encendida</span></div>
+        <div class="row"><span class="label">Nivel combustible</span><span class="val">1/2</span></div>
+      </div>`;
+            }
+            if (key === 'trabajos') {
+                return `
+      <div class="card worklist">
+        <div class="card-title">Mano de obra</div>
+        <div class="row"><div><div class="job-name">Aditivo limpieza inyectores</div><div class="job-mec">Sin mecánico</div></div><div class="job-price">$0</div></div>
+        <div class="row"><div><div class="job-name">Revisión y relleno de niveles</div><div class="job-mec">Sin mecánico</div></div><div class="job-price">$0</div></div>
+        <div class="row"><div><div class="job-name">Lavado de motor</div><div class="job-mec">Sin mecánico</div></div><div class="job-price">$0</div></div>
+        <div class="row"><div><div class="job-name">Cambio filtro polen</div><div class="job-mec">Mecánico D.</div></div><div class="job-price">$45.000</div></div>
+      </div>
+      <div class="card total-card">
+        <div class="card-title" style="color:#A9BCC5;">Totales</div>
+        <div class="row"><span class="label">Subtotal trabajos</span><span class="val">$45.000</span></div>
+        <div class="row"><span class="label">Subtotal repuestos</span><span class="val">$20.000</span></div>
+        <div class="row grand"><span class="label">Total orden</span><span class="val">$77.350</span></div>
+      </div>`;
+            }
+            if (key === 'imagenes') {
+                return `
+      <div class="card">
+        <div class="card-title">Imágenes (0/10)</div>
+        <div class="img-grid">
+          ${'<div class="img-slot">+</div>'.repeat(6)}
+        </div>
+      </div>`;
+            }
+            if (key === 'pagos') {
+                return `
+      <div class="card">
+        <div class="card-title">Pagos</div>
+        <div class="pay-pill">
+          <span>Abonado $0 · Saldo $77.350</span>
+          <span>Sin abonos</span>
+        </div>
+      </div>`;
+            }
+        }
+
+        let pattern = 'A';
+        let activeSection = 'trabajos';
+
+        function buildBottomNav() {
+            const el = document.getElementById('bottomnav');
+            el.innerHTML = SECTIONS.map(s => `
+    <div class="bn-item ${s.key === activeSection ? 'active' : ''}" data-k="${s.key}">
+      ${ICONS[s.key]}
+      <span>${s.label}</span>
+    </div>`).join('');
+            el.querySelectorAll('.bn-item').forEach(item => {
+                item.addEventListener('click', () => { activeSection = item.dataset.k; render(); });
+            });
+        }
+
+        function buildTabbar() {
+            const el = document.getElementById('tabbar');
+            el.innerHTML = SECTIONS.map(s => `<div class="tab ${s.key === activeSection ? 'active' : ''}" data-k="${s.key}">${s.label}</div>`).join('');
+            el.querySelectorAll('.tab').forEach(item => {
+                item.addEventListener('click', () => { activeSection = item.dataset.k; render(); });
+            });
+        }
+
+        function buildSheet() {
+            const el = document.getElementById('sheetItems');
+            el.innerHTML = SECTIONS.map(s => `
+    <div class="sheet-item ${s.key === activeSection ? 'active' : ''}" data-k="${s.key}">
+      ${ICONS[s.key]}
+      <span>${s.label}</span>
+    </div>`).join('');
+            el.querySelectorAll('.sheet-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    activeSection = item.dataset.k;
+                    closeSheet();
+                    render();
+                });
+            });
+        }
+
+        function openSheet() {
+            document.getElementById('sheet').classList.add('open');
+            document.getElementById('sheetOverlay').classList.add('open');
+        }
+        function closeSheet() {
+            document.getElementById('sheet').classList.remove('open');
+            document.getElementById('sheetOverlay').classList.remove('open');
+        }
+
+        const CAPTIONS = {
+            A: 'Sección activa siempre visible abajo (íconos + texto), un solo tap para cambiar. Ocupa una franja fija de ~5 destinos, sin scroll.',
+            B: 'El menú se abre como bottom sheet (desde abajo, alcanzable con el pulgar). El botón flotante "Secciones" queda siempre disponible. Acciones (WhatsApp/PDF/Compartir) separadas dentro del mismo sheet.',
+            C: 'Tabs horizontales scrolleables arriba del contenido. Se ven 3-4 completas y las demás se descubren deslizando — sin menú intermedio, un tap directo por sección.'
+        };
+
+        function render() {
+            document.getElementById('content').innerHTML = renderContent(activeSection);
+            document.getElementById('content').scrollTop = 0;
+            document.getElementById('caption').innerHTML = `<b>${SECTIONS.find(s => s.key === activeSection).label}</b> — ${CAPTIONS[pattern]}`;
+
+            document.getElementById('bottomnav').style.display = pattern === 'A' ? 'flex' : 'none';
+            document.getElementById('fabBtn').style.display = pattern === 'B' ? 'flex' : 'none';
+            document.getElementById('tabbar').style.display = pattern === 'C' ? 'flex' : 'none';
+            document.getElementById('content').style.paddingBottom = pattern === 'A' ? '90px' : '24px';
+
+            if (pattern === 'A') buildBottomNav();
+            if (pattern === 'B') buildSheet();
+            if (pattern === 'C') buildTabbar();
+        }
+
+        document.getElementById('switcher').addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            document.querySelectorAll('#switcher button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            pattern = btn.dataset.p;
+            closeSheet();
+            render();
+        });
+
+        document.getElementById('fabBtn').addEventListener('click', openSheet);
+        document.getElementById('sheetOverlay').addEventListener('click', closeSheet);
+        document.getElementById('menuIcon').addEventListener('click', () => {
+            if (pattern === 'B') openSheet();
+        });
+
+        document.getElementById('backIcon').addEventListener('click', () => {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+    <div class="empty-hint" style="padding-top:60px;">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#C7D1D1" stroke-width="1.6" style="margin-bottom:10px;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      <div>Volviendo a <b style="color:var(--text);">Mis órdenes</b>…</div>
+    </div>`;
+            setTimeout(render, 700);
+        });
+
+        render();
+    </script>
+
+</body>
+
+</html>
