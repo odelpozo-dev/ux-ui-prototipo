@@ -3,21 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kaxis · Prototipo navegación mobile</title>
+<title>Kaxis · Navegación homogénea</title>
 <style>
   :root{
-    --navy:#173A66;
-    --navy-soft:#1968E5;
-    --blue:#1968E5;
-    --blue-dark:#1354BD;
+    --navy:#0F2A3D;
+    --blue:#2C4E96;
     --teal:#12B5A6;
     --teal-dark:#0C9E90;
+    --teal-soft:#E4F4F2;
+    --teal-border:#BFE6DF;
     --bg:#F5F7F7;
     --card:#FFFFFF;
     --line:#E4E8EC;
     --text:#16242C;
     --text-mute:#6B7A80;
-    --amber:#F2A93B;
   }
   *{box-sizing:border-box;}
   body{
@@ -29,23 +28,22 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:24px;
+    gap:20px;
   }
 
-  .intro{
-    max-width:560px;
-    text-align:center;
-  }
-  .intro h1{
-    font-size:20px;
-    margin:0 0 6px;
-    letter-spacing:-0.01em;
-  }
-  .intro p{
-    margin:0;
-    font-size:13.5px;
-    color:var(--text-mute);
-    line-height:1.5;
+  .intro{max-width:640px;text-align:center;}
+  .intro h1{font-size:19px;margin:0 0 6px;letter-spacing:-0.01em;}
+  .intro p{margin:0;font-size:13px;color:var(--text-mute);line-height:1.55;}
+  .intro .rule{
+    display:inline-block;
+    margin-top:10px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:8px 14px;
+    font-size:12px;
+    font-weight:700;
+    color:var(--blue);
   }
 
   .switcher{
@@ -55,130 +53,60 @@
     padding:5px;
     border-radius:12px;
     border:1px solid var(--line);
-    box-shadow:0 1px 2px rgba(15,42,61,0.05);
   }
   .switcher button{
     border:none;
     background:transparent;
-    padding:9px 14px;
+    padding:9px 16px;
     border-radius:8px;
     font-size:12.5px;
-    font-weight:600;
+    font-weight:700;
     color:var(--text-mute);
     cursor:pointer;
-    transition:all .15s ease;
-    white-space:nowrap;
   }
-  .switcher button.active{
-    background:var(--navy);
-    color:#fff;
-  }
+  .switcher button.active{background:var(--navy);color:#fff;}
 
   .phone{
     width:360px;
-    height:720px;
+    height:700px;
     background:#000;
     border-radius:42px;
     padding:12px;
-    box-shadow:0 20px 50px rgba(15,42,61,0.25), 0 2px 6px rgba(15,42,61,0.15);
+    box-shadow:0 20px 50px rgba(15,42,61,0.25);
     position:relative;
   }
   .screen{
-    width:100%;
-    height:100%;
+    width:100%;height:100%;
     background:var(--bg);
     border-radius:30px;
     overflow:hidden;
     position:relative;
-    display:flex;
-    flex-direction:column;
+    display:flex;flex-direction:column;
   }
   .notch{
-    position:absolute;
-    top:12px;
-    left:50%;
-    transform:translateX(-50%);
-    width:90px;
-    height:20px;
-    background:#000;
-    border-radius:12px;
-    z-index:50;
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);
+    width:90px;height:20px;background:#000;border-radius:12px;z-index:50;
   }
 
   .topbar{
     background:#fff;
-    color:var(--text);
-    padding:34px 16px 14px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    flex-shrink:0;
+    padding:16px 16px 10px;
+    display:flex;align-items:center;justify-content:space-between;
     border-bottom:1px solid var(--line);
-  }
-  .topbar-left{
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .brand{
-    font-size:15px;
-    font-weight:700;
-    letter-spacing:0.02em;
-    color:var(--text);
-  }
-  .brand span{color:var(--blue);}
-  .topbar-sub{
-    font-size:10px;
-    color:var(--text-mute);
-    margin-top:1px;
-  }
-  .icon-btn{
-    width:30px;height:30px;
-    display:flex;align-items:center;justify-content:center;
-    color:var(--text);
-    opacity:0.85;
-  }
-
-  .order-strip{
-    background:#fff;
-    color:var(--text);
-    padding:10px 16px 10px 13px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    font-size:11.5px;
-    flex-shrink:0;
-    border-left:3px solid var(--teal);
-    border-bottom:1px solid var(--line);
-  }
-  .order-strip .badge{
-    background:#E4F4F2;
-    color:var(--teal-dark);
-    font-weight:700;
-    font-size:10px;
-    padding:2px 9px;
-    border-radius:20px;
-    border:1px solid #BFE6DF;
-  }
-  .order-strip-right{
-    display:flex;
-    align-items:center;
-    gap:8px;
     flex-shrink:0;
   }
-  .strip-share-btn{
-    width:24px;height:24px;
-    display:flex;align-items:center;justify-content:center;
-    color:var(--blue);
-    cursor:pointer;
-  }
-  .strip-share-btn svg{width:16px;height:16px;}
+  .topbar-left{display:flex;align-items:center;gap:8px;min-width:0;}
+  .back-btn{width:22px;height:22px;color:var(--text);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .brand-row{display:flex;align-items:center;gap:6px;}
+  .brand-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;}
+  .brand-logo{font-size:15px;font-weight:800;color:var(--blue);letter-spacing:0.5px;}
+  .subtitle{font-size:10.5px;color:var(--text-mute);margin-top:1px;}
+  .menu-icon{color:var(--text);}
 
   .content{
     flex:1;
     overflow-y:auto;
-    padding:14px 14px 90px;
-    -webkit-overflow-scrolling:touch;
+    padding:12px 12px 16px;
   }
   .content::-webkit-scrollbar{display:none;}
 
@@ -186,782 +114,434 @@
     background:var(--card);
     border:1px solid var(--line);
     border-radius:14px;
-    padding:14px;
-    margin-bottom:12px;
-  }
-  .card-title{
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:0.04em;
-    color:var(--text-mute);
-    font-weight:700;
-    margin:0 0 10px;
-  }
-  .card-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    padding:12px 14px;
     margin-bottom:10px;
   }
-  .card-head .card-title{margin:0;}
-  .edit-btn{
-    width:26px;height:26px;
-    border-radius:50%;
-    background:#EAF1FD;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--blue);
-    cursor:pointer;
-    flex-shrink:0;
-  }
-  .edit-btn svg{width:13px;height:13px;}
-  .row{
-    display:flex;
-    justify-content:space-between;
-    padding:7px 0;
-    border-bottom:1px solid var(--line);
-    font-size:13px;
-  }
+  .card-title{font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#475569;font-weight:800;margin:0 0 8px;}
+  .row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:12.5px;}
   .row:last-child{border-bottom:none;}
   .row .label{color:var(--text-mute);}
-  .row .val{font-weight:600;}
+  .row .val{font-weight:700;color:var(--text);}
 
-  .worklist .row{align-items:center;}
-  .worklist .job-name{font-weight:600;font-size:13px;}
-  .worklist .job-mec{font-size:11px;color:var(--text-mute);margin-top:1px;}
-  .worklist .job-price{font-weight:700;font-size:13px;}
-
-  .total-card{
-    background:#fff;
+  /* pills sub-nivel: mismo componente en las dos pantallas */
+  .pill-tabs{display:flex;gap:8px;margin-bottom:10px;}
+  .pill{
+    flex:1;text-align:center;padding:9px 6px;border-radius:20px;
+    background:#fff;border:1px solid var(--line);
+    font-size:12px;font-weight:700;color:var(--text-mute);cursor:pointer;
   }
-  .total-card .row.grand{padding-top:10px;}
-  .total-card .row.grand .val{color:var(--text);font-size:17px;font-weight:800;}
-  .total-card .row.grand .label{color:var(--text);font-weight:700;}
+  .pill.active{background:var(--blue);color:#fff;border-color:var(--blue);}
 
-  .pay-pill{
-    background:#E7F8F1;
-    border:1px solid #BFE9D9;
-    border-radius:12px;
-    padding:12px 14px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:12.5px;
-    color:var(--teal-dark);
-    font-weight:600;
+  .badge{
+    background:var(--teal-soft);color:var(--teal-dark);font-weight:700;font-size:10px;
+    padding:3px 10px;border-radius:20px;border:1px solid var(--teal-border);text-transform:uppercase;
   }
 
-  .img-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
-  }
-  .img-slot{
-    aspect-ratio:1;
-    background:#EDF1F1;
-    border:1.5px dashed #C7D1D1;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#9AAAAF;
-    font-size:20px;
-  }
+  /* bottom nav: dos "vestimentas" para la misma posición, según el significado */
 
-  .empty-hint{
-    text-align:center;
-    padding:30px 20px;
-    color:var(--text-mute);
-    font-size:12.5px;
-  }
-
-  /* ---------- PATTERN A: Bottom nav icons ---------- */
+  /* Gestionar Datos: módulos independientes -> íconos sueltos y separados, sin nada que los una */
   .bottomnav{
-    position:absolute;
-    bottom:0;left:0;right:0;
-    background:#fff;
-    border-top:1px solid var(--line);
-    display:flex;
-    padding:8px 4px 14px;
-    z-index:40;
+    display:flex;justify-content:space-around;background:#fff;border-top:1px solid var(--line);
+    padding:10px 8px 12px;flex-shrink:0;
   }
-  .bottomnav .bn-item{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:3px;
-    color:var(--text-mute);
-    font-size:9.5px;
-    font-weight:600;
-    cursor:pointer;
-    padding:4px 0;
-  }
-  .bottomnav .bn-item.active{color:var(--teal-dark);}
-  .bottomnav .bn-item svg{width:20px;height:20px;}
-
-  /* ---------- PATTERN B: bottom sheet ---------- */
-  .fab{
-    position:absolute;
-    bottom:18px;
-    left:50%;
-    transform:translateX(-50%);
-    background:var(--teal);
-    color:#fff;
-    border:none;
-    border-radius:30px;
-    padding:12px 22px;
-    font-size:12.5px;
-    font-weight:700;
-    display:flex;
-    align-items:center;
-    gap:7px;
-    box-shadow:0 8px 20px rgba(12,181,166,0.35);
-    z-index:40;
-  }
-  .sheet-overlay{
-    position:absolute;
-    inset:0;
-    background:rgba(15,42,61,0.4);
-    z-index:45;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .2s ease;
-  }
-  .sheet-overlay.open{opacity:1;pointer-events:auto;}
-  .sheet{
-    position:absolute;
-    left:0;right:0;bottom:0;
-    background:#fff;
-    border-radius:20px 20px 0 0;
-    padding:10px 14px 24px;
-    transform:translateY(100%);
-    transition:transform .25s cubic-bezier(.2,.8,.3,1);
-    z-index:46;
-    box-shadow:0 -8px 30px rgba(0,0,0,0.15);
-  }
-  .sheet.open{transform:translateY(0);}
-  .sheet-handle{
-    width:36px;height:4px;background:#D8DEDE;border-radius:4px;
-    margin:0 auto 14px;
-  }
-  .sheet-title{font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-mute);font-weight:700;margin-bottom:8px;padding:0 4px;}
-  .sheet-item{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:12px 8px;
-    border-radius:10px;
-    font-size:14px;
-    font-weight:600;
-    cursor:pointer;
-  }
-  .sheet-item.active{background:#E4F4F2;color:var(--teal-dark);}
-  .sheet-item svg{width:19px;height:19px;flex-shrink:0;}
-  .sheet-divider{height:1px;background:var(--line);margin:8px 0;}
-  .sheet-actions{display:flex;gap:8px;padding:0 4px;}
-  .sheet-action{
-    flex:1;
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:10px 6px;
-    text-align:center;
-    font-size:11px;
-    font-weight:600;
-    color:var(--teal-dark);
+  .bn-item{
     display:flex;flex-direction:column;align-items:center;gap:4px;
+    color:var(--text-mute);font-size:9.5px;font-weight:700;cursor:pointer;padding:4px 10px;
   }
+  .bn-item.active{color:var(--teal-dark);}
+  .bn-item svg{width:20px;height:20px;}
 
-  /* ---------- PATTERN C: scrollable tabs ---------- */
-  .tabbar{
-    display:flex;
-    gap:6px;
-    padding:10px 14px 8px;
-    overflow-x:auto;
-    flex-shrink:0;
-    background:var(--bg);
-    scrollbar-width:none;
+  /* OT: mismo objeto, distintas facetas -> chip de contexto SOLDADO a la barra segmentada */
+  .segmentnav-wrap{
+    background:#fff;border-top:1px solid var(--line);
+    padding:0 10px 12px;flex-shrink:0;
   }
-  .tabbar::-webkit-scrollbar{display:none;}
-  .tab{
-    flex-shrink:0;
-    padding:8px 14px;
-    border-radius:20px;
-    background:#fff;
-    border:1px solid var(--line);
-    font-size:12px;
+  .ot-context-chip{
+    display:flex;align-items:center;gap:5px;
+    background:rgba(44,78,150,0.55);
+    color:rgba(255,255,255,0.85);
+    font-size:9px;
     font-weight:600;
-    color:var(--text-mute);
-    white-space:nowrap;
-    cursor:pointer;
+    padding:3px 9px;
+    margin-top:6px;
+    border-radius:9px 9px 0 0;
+    width:fit-content;
+    letter-spacing:0.2px;
   }
-  .tab.active{
+  .ot-context-chip .dot{width:4px;height:4px;border-radius:50%;background:var(--teal);}
+  .segmentnav{
+    display:flex;
+    background:var(--blue);
+    border-radius:0 12px 12px 12px;
+    padding:4px;
+    gap:0;
+  }
+  .seg-item{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+    padding:7px 2px;border-radius:9px;
+    color:rgba(255,255,255,0.55);font-size:9px;font-weight:700;cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+    position:relative;
+  }
+  .seg-item:not(:last-child)::after{
+    content:'';position:absolute;right:0;top:20%;bottom:20%;width:1px;
+    background:rgba(255,255,255,0.14);
+  }
+  .seg-item svg{width:17px;height:17px;}
+  .seg-item.active{
     background:var(--teal);
     color:#fff;
-    border-color:var(--teal);
   }
+  .seg-item.active::after{display:none;}
 
-  .subtabs{
-    display:flex;
-    gap:6px;
-    margin-bottom:12px;
-    background:#EDF1F1;
-    padding:4px;
-    border-radius:11px;
+  .segmentnav-wrap--top{
+    border-top:none;
+    border-bottom:1px solid var(--line);
+    padding:10px 10px 12px;
   }
-  .subtab{
-    flex:1;
-    text-align:center;
-    padding:8px 6px;
-    border-radius:8px;
-    font-size:12px;
-    font-weight:700;
-    color:var(--text-mute);
-    cursor:pointer;
-  }
-  .subtab.active{
-    background:var(--blue);
-    color:#fff;
-    box-shadow:0 2px 6px rgba(25,104,229,0.25);
-  }
-  .subtab .count{
-    display:inline-block;
-    margin-left:4px;
-    font-size:10.5px;
-    color:var(--text-mute);
-  }
-  .subtab.active .count{color:var(--teal-dark);}
+  .segmentnav-wrap--top .segmentnav{border-radius:12px;}
 
-  .fuel-block{padding:7px 0 4px;}
-  .fuel-label{color:var(--text-mute);font-size:13px;margin-bottom:10px;}
-  .fuel-track{
-    height:5px;
-    background:linear-gradient(90deg, var(--teal) 0%, var(--teal) var(--fuel-pct,50%), #E4E8EC var(--fuel-pct,50%), #E4E8EC 100%);
-    border-radius:4px;
-    position:relative;
-    margin:0 9px 8px;
-  }
-  .fuel-track::after{
-    content:'';
-    position:absolute;
-    top:50%;
-    left:var(--fuel-pct,50%);
-    width:16px;height:16px;
-    background:#fff;
-    border:3px solid var(--teal);
-    border-radius:50%;
-    transform:translate(-50%,-50%);
-    box-shadow:0 1px 3px rgba(0,0,0,0.15);
-  }
-  .fuel-ticks{
-    display:flex;
-    justify-content:space-between;
-    font-size:10.5px;
-    color:var(--text-mute);
-    padding:0 2px;
-  }
-  .fuel-value{
-    text-align:center;
-    font-size:12.5px;
-    font-weight:700;
-    color:var(--text);
-    margin-top:4px;
-  }
-
-  /* ---------- Menú de acciones (WhatsApp / PDF / Compartir) ---------- */
-  .actions-overlay{
-    position:absolute;
-    inset:0;
-    background:rgba(15,42,61,0.35);
-    z-index:55;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .15s ease;
-  }
-  .actions-overlay.open{opacity:1;pointer-events:auto;}
-  .actions-menu{
-    position:absolute;
-    top:60px;
-    right:14px;
-    width:230px;
-    background:#fff;
-    border-radius:16px;
-    box-shadow:0 12px 32px rgba(15,42,61,0.22);
-    padding:8px;
-    z-index:56;
-    opacity:0;
-    transform:translateY(-8px) scale(0.97);
-    pointer-events:none;
-    transition:all .18s cubic-bezier(.2,.8,.3,1);
-  }
-  .actions-menu.open{
-    opacity:1;
-    transform:translateY(0) scale(1);
-    pointer-events:auto;
-  }
-  .action-item{
-    display:flex;
-    align-items:center;
-    gap:11px;
-    padding:10px 8px;
-    border-radius:11px;
-    cursor:pointer;
-  }
-  .action-item:hover{background:#F5F7F7;}
-  .action-icon{
-    width:36px;height:36px;
-    border-radius:10px;
-    display:flex;align-items:center;justify-content:center;
-    flex-shrink:0;
-  }
-  .action-icon svg{width:18px;height:18px;}
-  .action-item.wa .action-icon{background:#E7F8EF;color:#25D366;}
-  .action-item.pdf .action-icon{background:#FDEDEA;color:#E15241;}
-  .action-item.share .action-icon{background:#EAF1FD;color:var(--blue);}
-  .action-title{font-size:13px;font-weight:700;color:var(--text);}
-  .action-sub{font-size:10.5px;color:var(--text-mute);margin-top:1px;}
-  .action-chevron{
-    width:15px;height:15px;
-    color:var(--text-mute);
-    flex-shrink:0;
-    transition:transform .18s ease;
-  }
-  .action-item.pdf.open .action-chevron{transform:rotate(180deg);}
-  .pdf-submenu{
-    max-height:0;
-    overflow:hidden;
-    transition:max-height .2s ease;
-    padding:0 8px 0 47px;
-  }
-  .pdf-submenu.open{max-height:100px;padding-top:2px;padding-bottom:4px;}
-  .pdf-suboption{
-    display:flex;
-    align-items:center;
-    gap:9px;
-    padding:8px 6px;
-    border-radius:8px;
-    font-size:12.5px;
-    font-weight:600;
-    color:var(--text);
-    cursor:pointer;
-  }
-  .pdf-suboption:hover{background:#F5F7F7;}
-  .pdf-suboption svg{width:15px;height:15px;color:var(--text-mute);flex-shrink:0;}
-
-  .toast{
-    position:absolute;
-    bottom:90px;
-    left:50%;
-    transform:translateX(-50%) translateY(10px);
-    background:var(--text);
-    color:#fff;
-    font-size:12px;
-    font-weight:600;
-    padding:10px 16px;
-    border-radius:30px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.25);
-    z-index:60;
-    opacity:0;
-    pointer-events:none;
-    transition:all .2s ease;
-    white-space:nowrap;
-  }
-  .toast.show{
-    opacity:1;
-    transform:translateX(-50%) translateY(0);
-  }
-
-  .caption{
-    max-width:360px;
-    text-align:center;
-    font-size:12.5px;
-    color:var(--text-mute);
-    line-height:1.5;
-  }
+  .caption{max-width:360px;text-align:center;font-size:12px;color:var(--text-mute);line-height:1.5;}
   .caption b{color:var(--text);}
-
-  .tap-hint{
-    position:absolute;
-    top:8px;right:8px;
-    background:rgba(15,42,61,0.85);
-    color:#fff;
-    font-size:9px;
-    padding:3px 8px;
-    border-radius:20px;
-    z-index:41;
-    pointer-events:none;
-  }
 </style>
 </head>
 <body>
 
 <div class="intro">
-  <h1>Navegación mobile — 3 propuestas</h1>
-  <p>Mismo contenido de la orden de trabajo, tres formas de moverse entre secciones. Toca los controles dentro del teléfono para probar cada una.</p>
+  <h1>Una sola regla de navegación, dos pantallas</h1>
+  <p>Prueba las dos vistas: la Orden de trabajo y Gestionar Datos. Ambas usan <b>exactamente el mismo componente</b> de bottom nav para su nivel raíz, y el mismo componente de pills para el sub-nivel (Trabajos↔Mano de obra/Repuestos, igual que Stock↔Bodega/Movimientos/Compras).</p>
+  <div class="rule">Misma posición siempre (abajo) · vestimenta según significado: segmentado = 1 objeto, íconos sueltos = módulos distintos</div>
 </div>
 
-<div class="switcher" id="switcher">
-  <button class="active" data-p="A">Bottom nav (íconos)</button>
-  <button data-p="B">Bottom sheet</button>
-  <button data-p="C">Tabs scrolleables</button>
+<div class="switcher" id="appSwitcher">
+  <button class="active" data-app="ot">Orden de trabajo</button>
+  <button data-app="datos">Gestionar datos</button>
+</div>
+
+<div class="switcher" id="posSwitcher" style="display:none;">
+  <button class="active" data-pos="bottom">Nav abajo</button>
+  <button data-pos="top">Nav arriba</button>
 </div>
 
 <div class="phone">
-  <div class="notch"></div>
   <div class="screen">
 
     <div class="topbar">
       <div class="topbar-left">
-        <div class="icon-btn" id="backIcon" title="Volver a Mis órdenes">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <div class="back-btn" id="backBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         </div>
         <div>
-          <div class="brand">Top Racing AC · <span>KAXIS</span></div>
-          <div class="topbar-sub">Orden #4821 · Mantención Kilometraje</div>
+          <div class="brand-row">
+            <span class="brand-name">Top Racing AC</span>
+            <span class="brand-logo">KAXIS</span>
+          </div>
+          <div class="subtitle" id="topSubtitle">Mantención Kilometraje</div>
         </div>
       </div>
-      <div class="icon-btn" id="menuIcon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      <div class="menu-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
       </div>
     </div>
 
-    <!-- Menú de acciones: siempre accesible desde el ⋮, independiente del patrón de navegación -->
-    <div class="actions-overlay" id="actionsOverlay"></div>
-    <div class="actions-menu" id="actionsMenu">
-      <div class="action-item wa">
-        <div class="action-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.1-.4-2.1-1.3-.8-.7-1.3-1.6-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.3 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.3-.1-.1-.3-.2-.5-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.3c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 14.9 3.6 13.5 3.6 12c0-4.6 3.8-8.4 8.4-8.4s8.4 3.8 8.4 8.4-3.8 8.2-8.4 8.2z"/></svg></div>
-        <div class="action-text"><div class="action-title">WhatsApp</div><div class="action-sub">Enviar orden al cliente</div></div>
+    <div class="segmentnav-wrap segmentnav-wrap--top" id="segmentnavWrapTop" style="display:none;padding-top:10px;border-bottom:none;">
+      <div class="segmentnav" id="segmentnavTop"></div>
+    </div>
+
+    <div id="orderStrip" style="display:none;padding:12px 14px;background:#fff;border-bottom:1px solid var(--line);align-items:center;justify-content:space-between;gap:8px;position:relative;">
+      <div style="min-width:0;">
+        <div style="font-size:13px;font-weight:700;color:var(--text);">Raúl</div>
+        <div style="font-size:11px;color:var(--text-mute);text-transform:uppercase;">WR1107 · Peugeot Partner</div>
       </div>
-      <div class="action-item pdf" id="pdfToggle">
-        <div class="action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div>
-        <div class="action-text"><div class="action-title">Descargar PDF</div><div class="action-sub">Generar PDF</div></div>
-        <svg class="action-chevron" id="pdfChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-      <div class="pdf-submenu" id="pdfSubmenu">
-        <div class="pdf-suboption" data-pdf="cliente">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Cliente
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+        <select id="statusSelect" style="appearance:none;background:var(--teal-soft);color:var(--teal-dark);border:1px solid var(--teal-border);font-size:10px;font-weight:700;padding:4px 20px 4px 10px;border-radius:20px;text-transform:uppercase;">
+          <option>Abierta</option>
+          <option selected>Ejecución</option>
+          <option>Cerrada</option>
+        </select>
+        <div id="shareBtn" style="cursor:pointer;color:var(--blue);display:flex;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
         </div>
-        <div class="pdf-suboption" data-pdf="mecanico">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 10-5.4 5.4L2 19l3 3 7.3-7.3a4 4 0 005.4-5.4z"/></svg>
-          Mecánico
+      </div>
+
+      <div id="shareMenu" style="display:none;position:absolute;top:48px;right:0;width:220px;background:#fff;border-radius:14px;box-shadow:0 12px 28px rgba(15,42,61,0.2);padding:6px;z-index:60;">
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:10px;cursor:pointer;">
+          <div style="width:32px;height:32px;border-radius:9px;background:#E7F8EF;color:#25D366;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.1-.4-2.1-1.3-.8-.7-1.3-1.6-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.3 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.3-.1-.1-.3-.2-.5-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.3c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 14.9 3.6 13.5 3.6 12c0-4.6 3.8-8.4 8.4-8.4s8.4 3.8 8.4 8.4-3.8 8.2-8.4 8.2z"/></svg>
+          </div>
+          <div><div style="font-size:12.5px;font-weight:700;color:var(--text);">WhatsApp</div><div style="font-size:10px;color:var(--text-mute);">Enviar orden al cliente</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:10px;cursor:pointer;">
+          <div style="width:32px;height:32px;border-radius:9px;background:#FDEDEA;color:#E15241;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+          </div>
+          <div><div style="font-size:12.5px;font-weight:700;color:var(--text);">Descargar PDF</div><div style="font-size:10px;color:var(--text-mute);">Generar PDF</div></div>
         </div>
       </div>
     </div>
-
-    <div class="order-strip">
-      <span>Raúl · WR1106 · Nissan Terrano</span>
-      <div class="order-strip-right">
-        <span class="badge">ABIERTA</span>
-        <div class="strip-share-btn" id="stripShareBtn" title="Compartir">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
-        </div>
-      </div>
-    </div>
-
-    <!-- Pattern C tabbar (only visible in mode C) -->
-    <div class="tabbar" id="tabbar" style="display:none;"></div>
 
     <div class="content" id="content"></div>
 
-    <!-- Pattern A -->
     <div class="bottomnav" id="bottomnav" style="display:none;"></div>
-
-    <!-- Pattern B -->
-    <div class="sheet-overlay" id="sheetOverlay"></div>
-    <div class="sheet" id="sheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-title">Secciones</div>
-      <div id="sheetItems"></div>
+    <div class="segmentnav-wrap" id="segmentnavWrap" style="display:none;">
+      <div class="ot-context-chip"><span class="dot"></span>WR1107 · Mantención Kilometraje</div>
+      <div class="segmentnav" id="segmentnav"></div>
     </div>
-    <div class="fab" id="fabBtn" style="display:none;">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Secciones
-    </div>
-
-    <div class="toast" id="toast"></div>
-
   </div>
 </div>
 
 <div class="caption" id="caption"></div>
 
 <script>
-const EDIT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg>';
-
 const ICONS = {
-  cliente: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
-  vehiculo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17a2 2 0 01-2-2v-3l2-5h10l3 5v3a2 2 0 01-2 2M5 17h14"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>',
-  trabajos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 10-5.4 5.4L2 19l3 3 7.3-7.3a4 4 0 005.4-5.4z"/></svg>',
+  ficha: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  trabajos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>',
   imagenes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
-  pagos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>'
+  pagos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>',
+  contactos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+  stock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+  finanzas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>'
 };
 
-const SECTIONS = [
-  {key:'cliente', label:'Cliente'},
-  {key:'vehiculo', label:'Vehículo'},
-  {key:'trabajos', label:'Trabajos'},
-  {key:'imagenes', label:'Imágenes'},
-  {key:'pagos', label:'Pagos'}
-];
+const APPS = {
+  ot: {
+    subtitle: 'Mantención Kilometraje',
+    sections: [
+      {key:'ficha', label:'Ficha'},
+      {key:'trabajos', label:'Trabajos'},
+      {key:'imagenes', label:'Imágenes'},
+      {key:'pagos', label:'Pagos'}
+    ],
+    defaultSection: 'trabajos'
+  },
+  datos: {
+    subtitle: 'Gestionar datos',
+    sections: [
+      {key:'contactos', label:'Contactos'},
+      {key:'stock', label:'Stock'},
+      {key:'finanzas', label:'Finanzas'}
+    ],
+    defaultSection: 'stock'
+  }
+};
 
-function renderContent(key){
-  if(key==='cliente'){
+let currentApp = 'ot';
+let navPosition = 'bottom'; // solo aplica a la OT: 'bottom' o 'top'
+let activeSection = APPS.ot.defaultSection;
+let subPill = { trabajos: 'mano', stock: 'bodega', contactos: 'mecanicos' };
+
+function renderOTContent(section, sub){
+  if(section==='ficha'){
     return `
       <div class="card">
-        <div class="card-head">
-          <div class="card-title">Datos del cliente</div>
-          <div class="edit-btn">${EDIT_ICON}</div>
-        </div>
+        <div class="card-title">Datos del cliente</div>
         <div class="row"><span class="label">Nombre</span><span class="val">Raúl</span></div>
         <div class="row"><span class="label">Teléfono</span><span class="val">+56 8 7463 6398</span></div>
-        <div class="row"><span class="label">Documento</span><span class="val">PDF / WhatsApp</span></div>
       </div>
       <div class="card">
-        <div class="card-title">Descripción</div>
-        <div style="font-size:13px;color:var(--text-mute);line-height:1.5;">Revisar frenos</div>
+        <div class="card-title">Datos del vehículo</div>
+        <div class="row"><span class="label">Patente</span><span class="val">WR1107</span></div>
+        <div class="row"><span class="label">Marca</span><span class="val">Peugeot</span></div>
       </div>`;
   }
-  if(key==='vehiculo'){
-    return `
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">Datos del vehículo</div>
-          <div class="edit-btn">${EDIT_ICON}</div>
-        </div>
-        <div class="row"><span class="label">Patente</span><span class="val">WR1106</span></div>
-        <div class="row"><span class="label">Marca</span><span class="val">Nissan</span></div>
-        <div class="row"><span class="label">Año</span><span class="val">2007</span></div>
-        <div class="row"><span class="label">Modelo</span><span class="val">Terrano</span></div>
-        <div class="row"><span class="label">VIN</span><span class="val">JN1CPGD22U0074293</span></div>
-        <div class="row"><span class="label">Combustible</span><span class="val">Diésel</span></div>
-      </div>
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">Recepción del vehículo</div>
-          <div class="edit-btn">${EDIT_ICON}</div>
-        </div>
-        <div class="row"><span class="label">Kilometraje</span><span class="val">56.000</span></div>
-        <div class="row"><span class="label">Luz Check Engine</span><span class="val">Encendida</span></div>
-        <div class="row"><span class="label">Luz servicio</span><span class="val">Encendida</span></div>
-        <div class="fuel-block">
-          <div class="fuel-label">Nivel combustible</div>
-          <div class="fuel-track" style="--fuel-pct:50%;"></div>
-          <div class="fuel-ticks"><span>Vacío</span><span>1/4</span><span>1/2</span><span>3/4</span><span>Lleno</span></div>
-          <div class="fuel-value">1/2</div>
-        </div>
-      </div>`;
-  }
-  if(key==='trabajos'){
+  if(section==='trabajos'){
     const manoObra = `
-      <div class="card worklist">
-        <div class="row"><div><div class="job-name">Aditivo limpieza inyectores</div><div class="job-mec">Sin mecánico</div></div><div class="job-price">$0</div></div>
-        <div class="row"><div><div class="job-name">Revisión y relleno de niveles</div><div class="job-mec">Sin mecánico</div></div><div class="job-price">$0</div></div>
-        <div class="row"><div><div class="job-name">Lavado de motor</div><div class="job-mec">Sin mecánico</div></div><div class="job-price">$0</div></div>
-        <div class="row"><div><div class="job-name">Cambio filtro polen</div><div class="job-mec">Mecánico D.</div></div><div class="job-price">$45.000</div></div>
+      <div class="card">
+        <div class="row"><span class="label">Aditivo limpieza inyectores</span><span class="val">$2.200</span></div>
+        <div class="row"><span class="label">Lavado de motor</span><span class="val">$10.000</span></div>
+        <div class="row"><span class="label">Cambio filtro polen</span><span class="val">$45.000</span></div>
       </div>`;
     const repuestos = `
-      <div class="card worklist">
-        <div class="row"><div><div class="job-name">Filtro de polen</div><div class="job-mec">Proveedor: Repuestos Sur</div></div><div class="job-price">$12.000</div></div>
-        <div class="row"><div><div class="job-name">Aditivo limpiador</div><div class="job-mec">Proveedor: Repuestos Sur</div></div><div class="job-price">$8.000</div></div>
+      <div class="card">
+        <div class="row"><span class="label">Filtro de polen</span><span class="val">$12.000</span></div>
       </div>`;
     return `
-      <div class="subtabs" id="workSubtabs">
-        <div class="subtab ${workTab==='mano'?'active':''}" data-w="mano">Mano de obra<span class="count">(4)</span></div>
-        <div class="subtab ${workTab==='repuestos'?'active':''}" data-w="repuestos">Repuestos<span class="count">(2)</span></div>
+      <div class="pill-tabs" id="subTabs">
+        <div class="pill ${sub==='mano'?'active':''}" data-sub="mano">Mano de obra (4)</div>
+        <div class="pill ${sub==='repuestos'?'active':''}" data-sub="repuestos">Repuestos (1)</div>
       </div>
-      ${workTab==='mano' ? manoObra : repuestos}
-      <div class="card total-card">
+      ${sub==='mano' ? manoObra : repuestos}
+      <div class="card">
         <div class="card-title">Totales</div>
-        <div class="row"><span class="label">Subtotal trabajos</span><span class="val">$45.000</span></div>
-        <div class="row"><span class="label">Subtotal repuestos</span><span class="val">$20.000</span></div>
-        <div class="row grand"><span class="label">Total orden</span><span class="val">$77.350</span></div>
+        <div class="row"><span class="label">Total orden</span><span class="val">$123.998</span></div>
       </div>`;
   }
-  if(key==='imagenes'){
-    return `
-      <div class="card">
-        <div class="card-title">Imágenes (0/10)</div>
-        <div class="img-grid">
-          ${'<div class="img-slot">+</div>'.repeat(6)}
-        </div>
-      </div>`;
+  if(section==='imagenes'){
+    return `<div class="card"><div class="card-title">Imágenes (2/10)</div><div class="row"><span class="label">2 fotos cargadas</span></div></div>`;
   }
-  if(key==='pagos'){
-    return `
-      <div class="card">
-        <div class="card-title">Pagos</div>
-        <div class="pay-pill">
-          <span>Abonado $0 · Saldo $77.350</span>
-          <span>Sin abonos</span>
-        </div>
-      </div>`;
+  if(section==='pagos'){
+    return `<div class="card"><div class="card-title">Pagos</div><div class="row"><span class="label">Abonado</span><span class="val">$0</span></div><div class="row"><span class="label">Saldo</span><span class="val">$123.998</span></div></div>`;
   }
 }
 
-let pattern = 'A';
-let activeSection = 'trabajos';
-let workTab = 'mano';
+function renderDatosContent(section, sub){
+  if(section==='contactos'){
+    const proveedores = `
+      <div class="card">
+        <div class="row"><span class="label">Repuestos Sur</span><span class="val">Editar</span></div>
+      </div>`;
+    const compradores = `
+      <div class="card">
+        <div class="row"><span class="label">Diego</span><span class="val">+56 9 4152 9250</span></div>
+      </div>`;
+    const mecanicos = `
+      <div class="card">
+        <div class="row"><span class="label">Fabiola Fuentes</span><span class="val">bono</span></div>
+        <div class="row"><span class="label">Mecánico Diego N.</span><span class="val">bono</span></div>
+        <div class="row"><span class="label">Raúl Toranzo</span><span class="val">bono</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Reporte bono · Mensual</div>
+        <div class="row"><span class="label">Total bonos</span><span class="val">$2.539</span></div>
+        <div class="row"><span class="label">Raúl Toranzo · GJGW33</span><span class="val">$2.539</span></div>
+      </div>`;
+    const map = {proveedores, compradores, mecanicos};
+    return `
+      <div class="pill-tabs" id="subTabs">
+        <div class="pill ${sub==='proveedores'?'active':''}" data-sub="proveedores">Proveedores</div>
+        <div class="pill ${sub==='compradores'?'active':''}" data-sub="compradores">Compradores</div>
+        <div class="pill ${sub==='mecanicos'?'active':''}" data-sub="mecanicos">Mecánicos</div>
+      </div>
+      ${map[sub]}`;
+  }
+  if(section==='stock'){
+    const bodega = `
+      <div class="card">
+        <div class="row"><span class="label">Alternador modular · Stock 4</span><span class="val">$15.000</span></div>
+        <div class="row"><span class="label">Bujías · Stock 41</span><span class="val">$1.500</span></div>
+        <div class="row"><span class="label">Filtro Aire · Stock 12</span><span class="val">$18.000</span></div>
+      </div>`;
+    const movimientos = `
+      <div class="card">
+        <div class="row"><span class="label">Entrada · Bujías x20</span><span class="val">Hoy</span></div>
+        <div class="row"><span class="label">Salida · Alternador x1</span><span class="val">Ayer</span></div>
+      </div>`;
+    const compras = `
+      <div class="card">
+        <div class="row"><span class="label">OC #221 · Proveedor Sur</span><span class="val">$85.000</span></div>
+      </div>`;
+    const map = {bodega, movimientos, compras};
+    return `
+      <div class="pill-tabs" id="subTabs">
+        <div class="pill ${sub==='bodega'?'active':''}" data-sub="bodega">Bodega</div>
+        <div class="pill ${sub==='movimientos'?'active':''}" data-sub="movimientos">Movimientos</div>
+        <div class="pill ${sub==='compras'?'active':''}" data-sub="compras">Compras</div>
+      </div>
+      ${map[sub]}`;
+  }
+  if(section==='finanzas'){
+    return `
+      <div class="card">
+        <div class="card-title">Resumen financiero</div>
+        <div class="row"><span class="label">Ventas</span><span class="val">$238.200</span></div>
+        <div class="row"><span class="label">Ganancia</span><span class="val">$159.200</span></div>
+        <div class="row"><span class="label">Margen</span><span class="val">67%</span></div>
+      </div>`;
+  }
+}
 
 function buildBottomNav(){
-  const el = document.getElementById('bottomnav');
-  el.innerHTML = SECTIONS.map(s=>`
-    <div class="bn-item ${s.key===activeSection?'active':''}" data-k="${s.key}">
-      ${ICONS[s.key]}
-      <span>${s.label}</span>
-    </div>`).join('');
-  el.querySelectorAll('.bn-item').forEach(item=>{
-    item.addEventListener('click',()=>{activeSection=item.dataset.k; render();});
-  });
-}
+  const app = APPS[currentApp];
+  const iconNavEl = document.getElementById('bottomnav');
+  const segNavWrapBottomEl = document.getElementById('segmentnavWrap');
+  const segNavWrapTopEl = document.getElementById('segmentnavWrapTop');
+  const posSwitcherEl = document.getElementById('posSwitcher');
+  const orderStripEl = document.getElementById('orderStrip');
 
-function buildTabbar(){
-  const el = document.getElementById('tabbar');
-  el.innerHTML = SECTIONS.map(s=>`<div class="tab ${s.key===activeSection?'active':''}" data-k="${s.key}">${s.label}</div>`).join('');
-  el.querySelectorAll('.tab').forEach(item=>{
-    item.addEventListener('click',()=>{activeSection=item.dataset.k; render();});
-  });
-}
+  // Ocultar todo primero
+  iconNavEl.style.display = 'none';
+  segNavWrapBottomEl.style.display = 'none';
+  segNavWrapTopEl.style.display = 'none';
+  posSwitcherEl.style.display = 'none';
+  orderStripEl.style.display = currentApp === 'ot' ? 'flex' : 'none';
 
-function buildSheet(){
-  const el = document.getElementById('sheetItems');
-  el.innerHTML = SECTIONS.map(s=>`
-    <div class="sheet-item ${s.key===activeSection?'active':''}" data-k="${s.key}">
-      ${ICONS[s.key]}
-      <span>${s.label}</span>
-    </div>`).join('');
-  el.querySelectorAll('.sheet-item').forEach(item=>{
-    item.addEventListener('click',()=>{
-      activeSection=item.dataset.k;
-      closeSheet();
-      render();
+  if(currentApp === 'ot'){
+    posSwitcherEl.style.display = 'flex';
+
+    const targetWrap = navPosition === 'top' ? segNavWrapTopEl : segNavWrapBottomEl;
+    const targetSegEl = navPosition === 'top' ? document.getElementById('segmentnavTop') : document.getElementById('segmentnav');
+    targetWrap.style.display = 'block';
+
+    targetSegEl.innerHTML = app.sections.map(s=>`
+      <div class="seg-item ${s.key===activeSection?'active':''}" data-k="${s.key}">
+        ${ICONS[s.key]}
+        <span>${s.label}</span>
+      </div>`).join('');
+    targetSegEl.querySelectorAll('.seg-item').forEach(item=>{
+      item.addEventListener('click',()=>{activeSection=item.dataset.k; render();});
     });
-  });
-}
+  } else {
+    // Módulos independientes -> íconos sueltos, cada uno un destino
+    iconNavEl.style.display = 'flex';
 
-function openSheet(){
-  document.getElementById('sheet').classList.add('open');
-  document.getElementById('sheetOverlay').classList.add('open');
+    iconNavEl.innerHTML = app.sections.map(s=>`
+      <div class="bn-item ${s.key===activeSection?'active':''}" data-k="${s.key}">
+        ${ICONS[s.key]}
+        <span>${s.label}</span>
+      </div>`).join('');
+    iconNavEl.querySelectorAll('.bn-item').forEach(item=>{
+      item.addEventListener('click',()=>{activeSection=item.dataset.k; render();});
+    });
+  }
 }
-function closeSheet(){
-  document.getElementById('sheet').classList.remove('open');
-  document.getElementById('sheetOverlay').classList.remove('open');
-}
-
-const CAPTIONS = {
-  A: 'Sección activa siempre visible abajo (íconos + texto), un solo tap para cambiar. Ocupa una franja fija de ~5 destinos, sin scroll.',
-  B: 'El menú se abre como bottom sheet (desde abajo, alcanzable con el pulgar). El botón flotante "Secciones" queda siempre disponible. Acciones (WhatsApp/PDF/Compartir) separadas dentro del mismo sheet.',
-  C: 'Tabs horizontales scrolleables arriba del contenido. Se ven 3-4 completas y las demás se descubren deslizando — sin menú intermedio, un tap directo por sección.'
-};
 
 function render(){
-  document.getElementById('content').innerHTML = renderContent(activeSection);
-  document.getElementById('content').scrollTop = 0;
+  const contentEl = document.getElementById('content');
+  const sub = subPill[activeSection];
 
-  const subtabsEl = document.getElementById('workSubtabs');
-  if(subtabsEl){
-    subtabsEl.querySelectorAll('.subtab').forEach(t=>{
-      t.addEventListener('click',()=>{workTab=t.dataset.w; render();});
+  contentEl.innerHTML = currentApp==='ot'
+    ? renderOTContent(activeSection, sub)
+    : renderDatosContent(activeSection, sub);
+
+  const subTabsEl = document.getElementById('subTabs');
+  if(subTabsEl){
+    subTabsEl.querySelectorAll('.pill').forEach(p=>{
+      p.addEventListener('click',()=>{subPill[activeSection]=p.dataset.sub; render();});
     });
   }
 
-  document.querySelectorAll('.edit-btn').forEach(btn=>{
-    btn.addEventListener('click',(e)=>{
-      e.stopPropagation();
-      const card = btn.closest('.card');
-      card.style.outline = '2px solid var(--blue)';
-      card.style.outlineOffset = '2px';
-      setTimeout(()=>{ card.style.outline = 'none'; }, 500);
-    });
-  });
-  document.getElementById('caption').innerHTML = `<b>${SECTIONS.find(s=>s.key===activeSection).label}</b> — ${CAPTIONS[pattern]}`;
+  document.getElementById('topSubtitle').textContent = APPS[currentApp].subtitle;
+  document.getElementById('backBtn').style.visibility = 'visible';
 
-  document.getElementById('bottomnav').style.display = pattern==='A' ? 'flex':'none';
-  document.getElementById('fabBtn').style.display = pattern==='B' ? 'flex':'none';
-  document.getElementById('tabbar').style.display = pattern==='C' ? 'flex':'none';
-  document.getElementById('content').style.paddingBottom = pattern==='A' ? '90px' : '24px';
+  const captions = {
+    ot: `<b>Orden de trabajo</b> — la barra queda literalmente "soldada" a un chip con la patente/cliente: visualmente son una sola pieza. Fondo oscuro compartido, divisores finos entre secciones (no espacios), sin gaps.`,
+    datos: `<b>Gestionar datos</b> — íconos completamente sueltos, con más aire entre ellos y sin fondo compartido ni chip que los conecte: cada uno flota independiente, como accesos a apps distintas.`
+  };
+  document.getElementById('caption').innerHTML = captions[currentApp];
 
-  if(pattern==='A') buildBottomNav();
-  if(pattern==='B') buildSheet();
-  if(pattern==='C') buildTabbar();
+  buildBottomNav();
 }
 
-document.getElementById('switcher').addEventListener('click',(e)=>{
+document.getElementById('appSwitcher').addEventListener('click',(e)=>{
   const btn = e.target.closest('button');
   if(!btn) return;
-  document.querySelectorAll('#switcher button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#appSwitcher button').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  pattern = btn.dataset.p;
-  closeSheet();
-  closeActions();
+  currentApp = btn.dataset.app;
+  activeSection = APPS[currentApp].defaultSection;
   render();
 });
 
-document.getElementById('fabBtn').addEventListener('click', openSheet);
-document.getElementById('sheetOverlay').addEventListener('click', closeSheet);
-
-function openActions(){
-  document.getElementById('actionsMenu').classList.add('open');
-  document.getElementById('actionsOverlay').classList.add('open');
-}
-function closeActions(){
-  document.getElementById('actionsMenu').classList.remove('open');
-  document.getElementById('actionsOverlay').classList.remove('open');
-  document.getElementById('pdfToggle').classList.remove('open');
-  document.getElementById('pdfSubmenu').classList.remove('open');
-}
-document.getElementById('menuIcon').addEventListener('click', (e)=>{
-  e.stopPropagation();
-  openActions();
-});
-document.getElementById('actionsOverlay').addEventListener('click', closeActions);
-document.getElementById('stripShareBtn').addEventListener('click', (e)=>{
-  e.stopPropagation();
-  openActions();
-});
-
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>{ t.classList.remove('show'); }, 1600);
-}
-
-document.querySelectorAll('.action-item').forEach(item=>{
-  if(item.id === 'pdfToggle') return;
-  item.addEventListener('click', ()=>{
-    item.style.background = '#EDF1F1';
-    const msg = item.classList.contains('wa') ? 'Abriendo WhatsApp…' : 'Abriendo opciones para compartir…';
-    setTimeout(()=>{ item.style.background=''; closeActions(); showToast(msg); }, 250);
-  });
-});
-
-document.getElementById('pdfToggle').addEventListener('click', (e)=>{
-  e.stopPropagation();
-  document.getElementById('pdfToggle').classList.toggle('open');
-  document.getElementById('pdfSubmenu').classList.toggle('open');
-});
-document.querySelectorAll('.pdf-suboption').forEach(opt=>{
-  opt.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    opt.style.background = '#EDF1F1';
-    const label = opt.dataset.pdf === 'cliente' ? 'Cliente' : 'Mecánico';
-    setTimeout(()=>{ opt.style.background=''; closeActions(); showToast(`Generando PDF · ${label}…`); }, 250);
-  });
-});
-
-document.getElementById('backIcon').addEventListener('click', ()=>{
-  const content = document.getElementById('content');
-  content.innerHTML = `
-    <div class="empty-hint" style="padding-top:60px;">
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#C7D1D1" stroke-width="1.6" style="margin-bottom:10px;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-      <div>Volviendo a <b style="color:var(--text);">Mis órdenes</b>…</div>
-    </div>`;
-  setTimeout(render, 700);
+document.getElementById('posSwitcher').addEventListener('click',(e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  document.querySelectorAll('#posSwitcher button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  navPosition = btn.dataset.pos;
+  render();
 });
 
 render();
+
+document.getElementById('shareBtn').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  const menu = document.getElementById('shareMenu');
+  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+});
+document.addEventListener('click', ()=>{
+  document.getElementById('shareMenu').style.display = 'none';
+});
+document.getElementById('shareMenu').addEventListener('click', (e)=> e.stopPropagation());
 </script>
 
 </body>
