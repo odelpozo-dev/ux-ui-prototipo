@@ -151,59 +151,24 @@
   .bn-item.active{color:var(--teal-dark);}
   .bn-item svg{width:20px;height:20px;}
 
-  /* OT: mismo objeto, distintas facetas -> chip de contexto SOLDADO a la barra segmentada */
+  /* OT: mismo componente pill que el resto de la app, sin fondo especial */
   .segmentnav-wrap{
     background:#fff;border-top:1px solid var(--line);
-    padding:0 10px 12px;flex-shrink:0;
+    padding:10px;flex-shrink:0;
   }
-  .ot-context-chip{
-    display:flex;align-items:center;gap:5px;
-    background:rgba(44,78,150,0.55);
-    color:rgba(255,255,255,0.85);
-    font-size:9px;
-    font-weight:600;
-    padding:3px 9px;
-    margin-top:6px;
-    border-radius:9px 9px 0 0;
-    width:fit-content;
-    letter-spacing:0.2px;
-  }
-  .ot-context-chip--bottom{
-    margin-top:0;
-    border-radius:0 0 9px 9px;
-  }
-  .ot-context-chip .dot{width:4px;height:4px;border-radius:50%;background:var(--teal);}
-  .segmentnav{
-    display:flex;
-    background:var(--blue);
-    border-radius:12px;
-    padding:4px;
-    gap:0;
-  }
+  .segmentnav{display:flex;gap:8px;}
   .seg-item{
-    flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
-    padding:7px 2px;border-radius:9px;
-    color:rgba(255,255,255,0.55);font-size:9px;font-weight:700;cursor:pointer;
-    transition:background .15s ease, color .15s ease;
-    position:relative;
+    flex:1;text-align:center;padding:9px 6px;border-radius:20px;
+    background:#fff;border:1px solid var(--line);
+    font-size:12px;font-weight:700;color:var(--text-mute);cursor:pointer;
   }
-  .seg-item:not(:last-child)::after{
-    content:'';position:absolute;right:0;top:20%;bottom:20%;width:1px;
-    background:rgba(255,255,255,0.14);
-  }
-  .seg-item svg{width:17px;height:17px;}
-  .seg-item.active{
-    background:var(--teal);
-    color:#fff;
-  }
-  .seg-item.active::after{display:none;}
+  .seg-item.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+  .seg-item svg{display:none;}
 
   .segmentnav-wrap--top{
     border-top:none;
     border-bottom:1px solid var(--line);
-    padding:10px 10px 12px;
   }
-  .segmentnav-wrap--top .segmentnav{border-radius:12px 12px 0 0;}
 
   .caption{max-width:360px;text-align:center;font-size:12px;color:var(--text-mute);line-height:1.5;}
   .caption b{color:var(--text);}
@@ -214,11 +179,6 @@
 <div class="switcher" id="appSwitcher">
   <button class="active" data-app="ot">Orden de trabajo</button>
   <button data-app="datos">Gestionar datos</button>
-</div>
-
-<div class="switcher" id="posSwitcher" style="display:none;">
-  <button class="active" data-pos="bottom">Nav abajo</button>
-  <button data-pos="top">Nav arriba</button>
 </div>
 
 <div class="phone">
@@ -242,9 +202,8 @@
       </div>
     </div>
 
-    <div class="segmentnav-wrap segmentnav-wrap--top" id="segmentnavWrapTop" style="display:none;padding-top:10px;border-bottom:none;">
+    <div class="segmentnav-wrap segmentnav-wrap--top" id="segmentnavWrapTop" style="display:none;">
       <div class="segmentnav" id="segmentnavTop"></div>
-      <div class="ot-context-chip ot-context-chip--bottom"><span class="dot"></span>WR1107 · Mantención Kilometraje</div>
     </div>
 
     <div id="orderStrip" style="display:none;padding:12px 14px;background:#fff;border-bottom:1px solid var(--line);align-items:center;justify-content:space-between;gap:8px;position:relative;">
@@ -282,10 +241,6 @@
     <div class="content" id="content"></div>
 
     <div class="bottomnav" id="bottomnav" style="display:none;"></div>
-    <div class="segmentnav-wrap" id="segmentnavWrap" style="display:none;padding-top:10px;">
-      <div class="ot-context-chip"><span class="dot"></span>WR1107 · Mantención Kilometraje</div>
-      <div class="segmentnav" id="segmentnav"></div>
-    </div>
   </div>
 </div>
 
@@ -323,7 +278,6 @@ const APPS = {
 };
 
 let currentApp = 'ot';
-let navPosition = 'bottom'; // solo aplica a la OT: 'bottom' o 'top'
 let activeSection = APPS.ot.defaultSection;
 let subPill = { trabajos: 'mano', stock: 'bodega', contactos: 'mecanicos' };
 
@@ -440,30 +394,20 @@ function renderDatosContent(section, sub){
 function buildBottomNav(){
   const app = APPS[currentApp];
   const iconNavEl = document.getElementById('bottomnav');
-  const segNavWrapBottomEl = document.getElementById('segmentnavWrap');
   const segNavWrapTopEl = document.getElementById('segmentnavWrapTop');
-  const posSwitcherEl = document.getElementById('posSwitcher');
   const orderStripEl = document.getElementById('orderStrip');
 
   // Ocultar todo primero
   iconNavEl.style.display = 'none';
-  segNavWrapBottomEl.style.display = 'none';
   segNavWrapTopEl.style.display = 'none';
-  posSwitcherEl.style.display = 'none';
   orderStripEl.style.display = currentApp === 'ot' ? 'flex' : 'none';
 
   if(currentApp === 'ot'){
-    posSwitcherEl.style.display = 'flex';
+    segNavWrapTopEl.style.display = 'block';
 
-    const targetWrap = navPosition === 'top' ? segNavWrapTopEl : segNavWrapBottomEl;
-    const targetSegEl = navPosition === 'top' ? document.getElementById('segmentnavTop') : document.getElementById('segmentnav');
-    targetWrap.style.display = 'block';
-
+    const targetSegEl = document.getElementById('segmentnavTop');
     targetSegEl.innerHTML = app.sections.map(s=>`
-      <div class="seg-item ${s.key===activeSection?'active':''}" data-k="${s.key}">
-        ${ICONS[s.key]}
-        <span>${s.label}</span>
-      </div>`).join('');
+      <div class="seg-item ${s.key===activeSection?'active':''}" data-k="${s.key}">${s.label}</div>`).join('');
     targetSegEl.querySelectorAll('.seg-item').forEach(item=>{
       item.addEventListener('click',()=>{activeSection=item.dataset.k; render();});
     });
@@ -510,15 +454,6 @@ document.getElementById('appSwitcher').addEventListener('click',(e)=>{
   btn.classList.add('active');
   currentApp = btn.dataset.app;
   activeSection = APPS[currentApp].defaultSection;
-  render();
-});
-
-document.getElementById('posSwitcher').addEventListener('click',(e)=>{
-  const btn = e.target.closest('button');
-  if(!btn) return;
-  document.querySelectorAll('#posSwitcher button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  navPosition = btn.dataset.pos;
   render();
 });
 
