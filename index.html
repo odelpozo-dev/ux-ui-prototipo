@@ -1,4 +1,4 @@
- la barra queda literal<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -6,7 +6,7 @@
 <title>Kaxis · Navegación homogénea</title>
 <style>
   :root{
-    --navy:#0F2A3D;x
+    --navy:#0F2A3D;
     --blue:#2C4E96;
     --teal:#12B5A6;
     --teal-dark:#0C9E90;
@@ -211,11 +211,6 @@
 </head>
 <body>
 
-<div class="intro">
-  <h1>Una sola regla de navegación, dos pantallas</h1>
-  <div class="rule">Misma posición siempre (abajo) · vestimenta según significado: segmentado = 1 objeto, íconos sueltos = módulos distintos</div>
-</div>
-
 <div class="switcher" id="appSwitcher">
   <button class="active" data-app="ot">Orden de trabajo</button>
   <button data-app="datos">Gestionar datos</button>
@@ -293,8 +288,6 @@
     </div>
   </div>
 </div>
-
-<div class="caption" id="caption"></div>
 
 <script>
 const ICONS = {
@@ -506,12 +499,6 @@ function render(){
 
   document.getElementById('topSubtitle').textContent = APPS[currentApp].subtitle;
   document.getElementById('backBtn').style.visibility = 'visible';
-
-  const captions = {
-    ot: `<b>Orden de trabajo</b>`,
-    datos: `<b>Gestionar datos</b>`
-  };
-  document.getElementById('caption').innerHTML = captions[currentApp];
 
   buildBottomNav();
 }
