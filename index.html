@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kaxis · Navegación homogénea</title>
+<title>Kaxis · Nav homogénea + retomar OT</title>
 <style>
   :root{
     --navy:#0F2A3D;
     --blue:#2C4E96;
-    --teal:#12B5A6;
+    --blue-soft:#E6ECF8;
     --teal-dark:#0C9E90;
-    --teal-soft:#E4F4F2;
-    --teal-border:#BFE6DF;
+    --amber:#B45309;
+    --amber-soft:#FEF3E2;
+    --amber-border:#FCE0B0;
     --bg:#F5F7F7;
     --card:#FFFFFF;
     --line:#E4E8EC;
@@ -25,63 +26,27 @@
     background:linear-gradient(180deg,#EEF2F2 0%,#E4EAEA 100%);
     color:var(--text);
     padding:32px 16px 60px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:20px;
+    display:flex;flex-direction:column;align-items:center;gap:20px;
   }
 
   .intro{max-width:640px;text-align:center;}
   .intro h1{font-size:19px;margin:0 0 6px;letter-spacing:-0.01em;}
   .intro p{margin:0;font-size:13px;color:var(--text-mute);line-height:1.55;}
-  .intro .rule{
-    display:inline-block;
-    margin-top:10px;
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:8px 14px;
-    font-size:12px;
-    font-weight:700;
-    color:var(--blue);
-  }
 
-  .switcher{
-    display:flex;
-    gap:6px;
-    background:var(--card);
-    padding:5px;
-    border-radius:12px;
-    border:1px solid var(--line);
-  }
+  .switcher{display:flex;gap:6px;background:var(--card);padding:5px;border-radius:12px;border:1px solid var(--line);}
   .switcher button{
-    border:none;
-    background:transparent;
-    padding:9px 16px;
-    border-radius:8px;
-    font-size:12.5px;
-    font-weight:700;
-    color:var(--text-mute);
-    cursor:pointer;
+    border:none;background:transparent;padding:9px 14px;border-radius:8px;
+    font-size:12px;font-weight:700;color:var(--text-mute);cursor:pointer;
   }
   .switcher button.active{background:var(--navy);color:#fff;}
 
   .phone{
-    width:360px;
-    height:700px;
-    background:#000;
-    border-radius:42px;
-    padding:12px;
-    box-shadow:0 20px 50px rgba(15,42,61,0.25);
-    position:relative;
+    width:360px;height:700px;background:#000;border-radius:42px;padding:12px;
+    box-shadow:0 20px 50px rgba(15,42,61,0.25);position:relative;
   }
   .screen{
-    width:100%;height:100%;
-    background:var(--bg);
-    border-radius:30px;
-    overflow:hidden;
-    position:relative;
-    display:flex;flex-direction:column;
+    width:100%;height:100%;background:var(--bg);border-radius:30px;overflow:hidden;
+    position:relative;display:flex;flex-direction:column;
   }
   .notch{
     position:absolute;top:12px;left:50%;transform:translateX(-50%);
@@ -89,398 +54,264 @@
   }
 
   .topbar{
-    background:#fff;
-    padding:16px 16px 10px;
-    display:flex;align-items:center;justify-content:space-between;
-    border-bottom:1px solid var(--line);
-    flex-shrink:0;
+    background:#fff;padding:16px 16px 10px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--line);flex-shrink:0;
   }
-  .topbar-left{display:flex;align-items:center;gap:8px;min-width:0;}
-  .back-btn{width:22px;height:22px;color:var(--text);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
   .brand-row{display:flex;align-items:center;gap:6px;}
   .brand-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;}
   .brand-logo{font-size:15px;font-weight:800;color:var(--blue);letter-spacing:0.5px;}
   .subtitle{font-size:10.5px;color:var(--text-mute);margin-top:1px;}
-  .menu-icon{color:var(--text);}
+  .menu-icon{color:var(--text);cursor:pointer;}
 
-  .content{
-    flex:1;
-    overflow-y:auto;
-    padding:12px 12px 16px;
+  /* chip para retomar la OT que quedó abierta */
+  .resume-chip{
+    display:none;
+    margin:10px 12px 0;
+    background:var(--amber-soft);
+    border:1px solid var(--amber-border);
+    border-radius:12px;
+    padding:9px 11px;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    cursor:pointer;
   }
+  .resume-chip.show{display:flex;}
+  .resume-chip .rc-left{display:flex;align-items:center;gap:8px;min-width:0;}
+  .resume-chip .rc-left svg{width:16px;height:16px;color:var(--amber);flex-shrink:0;}
+  .resume-chip .rc-text{min-width:0;}
+  .resume-chip .rc-label{font-size:9.5px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:0.03em;}
+  .resume-chip .rc-order{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .resume-chip .rc-arrow{font-size:11px;font-weight:700;color:var(--amber);white-space:nowrap;flex-shrink:0;}
+
+  .content{flex:1;overflow-y:auto;padding:12px 12px 16px;}
   .content::-webkit-scrollbar{display:none;}
 
-  .card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:12px 14px;
-    margin-bottom:10px;
-  }
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;}
   .card-title{font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:#475569;font-weight:800;margin:0 0 8px;}
   .row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:12.5px;}
   .row:last-child{border-bottom:none;}
   .row .label{color:var(--text-mute);}
   .row .val{font-weight:700;color:var(--text);}
 
-  /* pills sub-nivel: mismo componente en las dos pantallas */
   .pill-tabs{display:flex;gap:8px;margin-bottom:10px;}
   .pill{
-    flex:1;text-align:center;padding:9px 6px;border-radius:20px;
-    background:#fff;border:1px solid var(--line);
+    flex:1;text-align:center;padding:9px 6px;border-radius:20px;background:#fff;border:1px solid var(--line);
     font-size:12px;font-weight:700;color:var(--text-mute);cursor:pointer;
   }
   .pill.active{background:var(--blue);color:#fff;border-color:var(--blue);}
 
-  .badge{
-    background:var(--teal-soft);color:var(--teal-dark);font-weight:700;font-size:10px;
-    padding:3px 10px;border-radius:20px;border:1px solid var(--teal-border);text-transform:uppercase;
+  .search-box{
+    height:34px;border-radius:10px;border:1px solid var(--line);background:#fff;
+    display:flex;align-items:center;padding:0 10px;font-size:12px;color:#94a3b8;margin-bottom:10px;gap:8px;
   }
+  .search-box svg{width:15px;height:15px;flex-shrink:0;}
 
-  /* bottom nav: dos "vestimentas" para la misma posición, según el significado */
+  .status-filters{display:flex;gap:6px;margin-bottom:10px;}
+  .status-filters span{font-size:11px;padding:5px 11px;border-radius:999px;font-weight:700;}
+  .status-filters .on{background:var(--navy);color:#fff;}
+  .status-filters .off{background:#fff;border:1px solid var(--line);color:var(--text-mute);}
 
-  /* Gestionar Datos: módulos independientes -> íconos sueltos y separados, sin nada que los una */
-  .bottomnav{
-    display:flex;justify-content:space-around;background:#fff;border-top:1px solid var(--line);
-    padding:10px 8px 12px;flex-shrink:0;
+  .empty-state{text-align:center;color:var(--text-mute);font-size:12px;padding:36px 0;}
+
+  .bottombar{border-top:1px solid var(--line);background:#fff;padding:8px 10px 10px;flex-shrink:0;}
+  .create-row{display:flex;justify-content:center;margin-bottom:8px;}
+  .create-btn{
+    background:var(--blue);color:#fff;border:none;border-radius:999px;font-size:11px;font-weight:700;
+    padding:7px 16px;display:inline-flex;align-items:center;gap:5px;cursor:pointer;
   }
+  .create-btn svg{width:14px;height:14px;}
+
+  .bottomnav{display:flex;justify-content:space-around;}
   .bn-item{
-    display:flex;flex-direction:column;align-items:center;gap:4px;
-    color:var(--text-mute);font-size:9.5px;font-weight:700;cursor:pointer;padding:4px 10px;
+    display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text-mute);
+    font-size:9.5px;font-weight:700;cursor:pointer;background:none;border:none;padding:2px 4px;
   }
-  .bn-item.active{color:var(--teal-dark);}
-  .bn-item svg{width:20px;height:20px;}
+  .bn-item .icon-wrap{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;}
+  .bn-item.active{color:var(--blue);}
+  .bn-item.active .icon-wrap{background:var(--blue-soft);}
+  .bn-item svg{width:18px;height:18px;}
 
-  /* OT: mismo componente pill que el resto de la app, sin fondo especial */
-  .segmentnav-wrap{
-    background:#fff;border-top:1px solid var(--line);
-    padding:10px;flex-shrink:0;
-  }
-  .segmentnav{display:flex;gap:8px;}
-  .seg-item{
-    flex:1;text-align:center;padding:9px 6px;border-radius:20px;
-    background:#fff;border:1px solid var(--line);
-    font-size:12px;font-weight:700;color:var(--text-mute);cursor:pointer;
-  }
-  .seg-item.active{background:var(--blue);color:#fff;border-color:var(--blue);}
-  .seg-item svg{display:none;}
-
-  .segmentnav-wrap--top{
-    border-top:none;
-    border-bottom:1px solid var(--line);
-  }
-
-  .caption{max-width:360px;text-align:center;font-size:12px;color:var(--text-mute);line-height:1.5;}
+  .caption{max-width:420px;text-align:center;font-size:12px;color:var(--text-mute);line-height:1.5;}
   .caption b{color:var(--text);}
 </style>
 </head>
 <body>
 
-<div class="switcher" id="appSwitcher">
-  <button class="active" data-app="ot">Orden de trabajo</button>
-  <button data-app="datos">Gestionar datos</button>
+<div class="intro">
+  <h1>Kaxis — nav homogénea + retomar OT</h1>
+  <p>Al ir a Stock/Contactos/Finanzas desde una OT abierta, aparece un aviso para volver directo a esa orden — sin tener que buscarla de nuevo en la lista.</p>
+</div>
+
+<div class="switcher" id="flowSwitcher">
+  <button class="active" data-flow="from-ot">Flujo: entré desde una OT</button>
+  <button data-flow="from-home">Flujo: entré desde el Home</button>
 </div>
 
 <div class="phone">
+  <div class="notch"></div>
   <div class="screen">
-
     <div class="topbar">
-      <div class="topbar-left">
-        <div class="back-btn" id="backBtn" style="cursor:pointer;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        </div>
-        <div>
-          <div class="brand-row">
-            <span class="brand-name">Top Racing AC</span>
-            <span class="brand-logo">KAXIS</span>
-          </div>
-          <div class="subtitle" id="topSubtitle">Mantención Kilometraje</div>
-        </div>
+      <div>
+        <div class="brand-row"><span class="brand-name">Top Racing AC</span><span class="brand-logo">KAXIS</span></div>
+        <div class="subtitle" id="topSubtitle">Mis órdenes de trabajo</div>
       </div>
-      <div class="menu-icon" id="hamburgerBtn" style="cursor:pointer;">
+      <div class="menu-icon" id="hamburgerBtn">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
       </div>
     </div>
 
-    <div class="segmentnav-wrap segmentnav-wrap--top" id="segmentnavWrapTop" style="display:none;">
-      <div class="segmentnav" id="segmentnavTop"></div>
-    </div>
-
-    <div id="orderStrip" style="display:none;padding:12px 14px;background:#fff;border-bottom:1px solid var(--line);align-items:center;justify-content:space-between;gap:8px;position:relative;">
-      <div style="min-width:0;">
-        <div style="font-size:13px;font-weight:700;color:var(--text);">Raúl</div>
-        <div style="font-size:11px;color:var(--text-mute);text-transform:uppercase;">WR1107 · Peugeot Partner</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
-        <select id="statusSelect" style="appearance:none;background:var(--teal-soft);color:var(--teal-dark);border:1px solid var(--teal-border);font-size:10px;font-weight:700;padding:4px 20px 4px 10px;border-radius:20px;text-transform:uppercase;">
-          <option>Abierta</option>
-          <option selected>Ejecución</option>
-          <option>Cerrada</option>
-        </select>
-        <div id="shareBtn" style="cursor:pointer;color:var(--blue);display:flex;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+    <div class="resume-chip" id="resumeChip">
+      <div class="rc-left">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+        <div class="rc-text">
+          <div class="rc-label">Editando</div>
+          <div class="rc-order">AB-1234 · Toyota Yaris</div>
         </div>
       </div>
-
-      <div id="shareMenu" style="display:none;position:absolute;top:48px;right:0;width:220px;background:#fff;border-radius:14px;box-shadow:0 12px 28px rgba(15,42,61,0.2);padding:6px;z-index:60;">
-        <div style="display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:10px;cursor:pointer;">
-          <div style="width:32px;height:32px;border-radius:9px;background:#E7F8EF;color:#25D366;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.1-.4-2.1-1.3-.8-.7-1.3-1.6-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.3 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.3-.1-.1-.3-.2-.5-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.3c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 14.9 3.6 13.5 3.6 12c0-4.6 3.8-8.4 8.4-8.4s8.4 3.8 8.4 8.4-3.8 8.2-8.4 8.2z"/></svg>
-          </div>
-          <div><div style="font-size:12.5px;font-weight:700;color:var(--text);">WhatsApp</div><div style="font-size:10px;color:var(--text-mute);">Enviar orden al cliente</div></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:10px;cursor:pointer;">
-          <div style="width:32px;height:32px;border-radius:9px;background:#FDEDEA;color:#E15241;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-          </div>
-          <div><div style="font-size:12.5px;font-weight:700;color:var(--text);">Descargar PDF</div><div style="font-size:10px;color:var(--text-mute);">Generar PDF</div></div>
-        </div>
-      </div>
+      <div class="rc-arrow">Volver →</div>
     </div>
 
     <div class="content" id="content"></div>
 
-    <div class="bottomnav" id="bottomnav" style="display:none;"></div>
+    <div class="bottombar">
+      <div class="create-row">
+        <button class="create-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Crear orden
+        </button>
+      </div>
+      <div class="bottomnav" id="bottomnav"></div>
+    </div>
   </div>
+</div>
+
+<div class="caption">
+  Simulación: partes en <b>Edición OT</b> (AB-1234), tocas <b>Stock</b> en la nav. Con el flujo "entré desde una OT" verás el aviso ámbar arriba. Con "entré desde el Home", ese aviso no aparece porque no hay ninguna orden en curso.
 </div>
 
 <script>
 const ICONS = {
-  ficha: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
-  trabajos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>',
-  imagenes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
-  pagos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>',
-  contactos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
-  stock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
-  finanzas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>',
-  buscar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'
+  orders: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>',
+  contacts: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+  stock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 9v10a2 2 0 01-2 2H5a2 2 0 01-2-2V9"/><path d="M1 5a2 2 0 012-2h18a2 2 0 012 2v4H1V5z"/><line x1="10" y1="13" x2="14" y2="13"/></svg>',
+  finance: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>'
 };
 
-const APPS = {
-  ot: {
-    subtitle: 'Mantención Kilometraje',
-    sections: [
-      {key:'ficha', label:'Ficha'},
-      {key:'trabajos', label:'Trabajos'},
-      {key:'imagenes', label:'Imágenes'},
-      {key:'pagos', label:'Pagos'}
-    ],
-    defaultSection: 'trabajos'
-  },
-  datos: {
-    subtitle: 'Gestionar datos',
-    sections: [
-      {key:'contactos', label:'Contactos'},
-      {key:'stock', label:'Stock'},
-      {key:'finanzas', label:'Finanzas'},
-      {key:'buscar', label:'Buscar OT'}
-    ],
-    defaultSection: 'stock'
-  }
+const NAV_ITEMS = [
+  {key:'orders', label:'Órdenes'},
+  {key:'contacts', label:'Contactos'},
+  {key:'stock', label:'Stock'},
+  {key:'finance', label:'Finanzas'}
+];
+
+const SCREENS = {
+  home:  {subtitle:'Mis órdenes de trabajo', activeModule:'orders'},
+  ot:    {subtitle:'Servicio', activeModule:'orders'},
+  datos: {subtitle:'Gestionar datos', activeModule:'contacts'}
 };
 
-let currentApp = 'ot';
-let activeSection = APPS.ot.defaultSection;
-let subPill = { trabajos: 'mano', stock: 'bodega', contactos: 'mecanicos' };
+let currentScreen = 'ot';
+let quoteSub = 'compradores';
+let cameFromOrder = true; // simula si hay una OT "en curso" al navegar a otro módulo
 
-function renderOTContent(section, sub){
-  if(section==='ficha'){
-    return `
-      <div class="card">
-        <div class="card-title">Datos del cliente</div>
-        <div class="row"><span class="label">Nombre</span><span class="val">Raúl</span></div>
-        <div class="row"><span class="label">Teléfono</span><span class="val">+56 8 7463 6398</span></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Datos del vehículo</div>
-        <div class="row"><span class="label">Patente</span><span class="val">WR1107</span></div>
-        <div class="row"><span class="label">Marca</span><span class="val">Peugeot</span></div>
-      </div>`;
-  }
-  if(section==='trabajos'){
-    const manoObra = `
-      <div class="card">
-        <div class="row"><span class="label">Aditivo limpieza inyectores</span><span class="val">$2.200</span></div>
-        <div class="row"><span class="label">Lavado de motor</span><span class="val">$10.000</span></div>
-        <div class="row"><span class="label">Cambio filtro polen</span><span class="val">$45.000</span></div>
-      </div>`;
-    const repuestos = `
-      <div class="card">
-        <div class="row"><span class="label">Filtro de polen</span><span class="val">$12.000</span></div>
-      </div>`;
-    return `
-      <div class="pill-tabs" id="subTabs">
-        <div class="pill ${sub==='mano'?'active':''}" data-sub="mano">Mano de obra (4)</div>
-        <div class="pill ${sub==='repuestos'?'active':''}" data-sub="repuestos">Repuestos (1)</div>
-      </div>
-      ${sub==='mano' ? manoObra : repuestos}
-      <div class="card">
-        <div class="card-title">Totales</div>
-        <div class="row"><span class="label">Total orden</span><span class="val">$123.998</span></div>
-      </div>`;
-  }
-  if(section==='imagenes'){
-    return `<div class="card"><div class="card-title">Imágenes (2/10)</div><div class="row"><span class="label">2 fotos cargadas</span></div></div>`;
-  }
-  if(section==='pagos'){
-    return `<div class="card"><div class="card-title">Pagos</div><div class="row"><span class="label">Abonado</span><span class="val">$0</span></div><div class="row"><span class="label">Saldo</span><span class="val">$123.998</span></div></div>`;
-  }
+function renderHome(){
+  return `
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Buscar (patente / cliente)
+    </div>
+    <div class="status-filters">
+      <span class="on">Todas</span><span class="off">Abierta</span><span class="off">Ejecución</span><span class="off">Cerrada</span>
+    </div>
+    <div class="card"><div class="empty-state">No hay órdenes que coincidan.</div></div>`;
 }
 
-function renderDatosContent(section, sub){
-  if(section==='contactos'){
-    const proveedores = `
-      <div class="card">
-        <div class="row"><span class="label">Repuestos Sur</span><span class="val">Editar</span></div>
-      </div>`;
-    const compradores = `
-      <div class="card">
-        <div class="row"><span class="label">Diego</span><span class="val">+56 9 4152 9250</span></div>
-      </div>`;
-    const mecanicos = `
-      <div class="card">
-        <div class="row"><span class="label">Fabiola Fuentes</span><span class="val">bono</span></div>
-        <div class="row"><span class="label">Mecánico Diego N.</span><span class="val">bono</span></div>
-        <div class="row"><span class="label">Raúl Toranzo</span><span class="val">bono</span></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Reporte bono · Mensual</div>
-        <div class="row"><span class="label">Total bonos</span><span class="val">$2.539</span></div>
-        <div class="row"><span class="label">Raúl Toranzo · GJGW33</span><span class="val">$2.539</span></div>
-      </div>`;
-    const map = {proveedores, compradores, mecanicos};
-    return `
-      <div class="pill-tabs" id="subTabs">
-        <div class="pill ${sub==='proveedores'?'active':''}" data-sub="proveedores">Proveedores</div>
-        <div class="pill ${sub==='compradores'?'active':''}" data-sub="compradores">Compradores</div>
-        <div class="pill ${sub==='mecanicos'?'active':''}" data-sub="mecanicos">Mecánicos</div>
-      </div>
-      ${map[sub]}`;
-  }
-  if(section==='stock'){
-    const bodega = `
-      <div class="card">
-        <div class="row"><span class="label">Alternador modular · Stock 4</span><span class="val">$15.000</span></div>
-        <div class="row"><span class="label">Bujías · Stock 41</span><span class="val">$1.500</span></div>
-        <div class="row"><span class="label">Filtro Aire · Stock 12</span><span class="val">$18.000</span></div>
-      </div>`;
-    const movimientos = `
-      <div class="card">
-        <div class="row"><span class="label">Entrada · Bujías x20</span><span class="val">Hoy</span></div>
-        <div class="row"><span class="label">Salida · Alternador x1</span><span class="val">Ayer</span></div>
-      </div>`;
-    const compras = `
-      <div class="card">
-        <div class="row"><span class="label">OC #221 · Proveedor Sur</span><span class="val">$85.000</span></div>
-      </div>`;
-    const map = {bodega, movimientos, compras};
-    return `
-      <div class="pill-tabs" id="subTabs">
-        <div class="pill ${sub==='bodega'?'active':''}" data-sub="bodega">Bodega</div>
-        <div class="pill ${sub==='movimientos'?'active':''}" data-sub="movimientos">Movimientos</div>
-        <div class="pill ${sub==='compras'?'active':''}" data-sub="compras">Compras</div>
-      </div>
-      ${map[sub]}`;
-  }
-  if(section==='finanzas'){
-    return `
-      <div class="card">
-        <div class="card-title">Resumen financiero</div>
-        <div class="row"><span class="label">Ventas</span><span class="val">$238.200</span></div>
-        <div class="row"><span class="label">Ganancia</span><span class="val">$159.200</span></div>
-        <div class="row"><span class="label">Margen</span><span class="val">67%</span></div>
-      </div>`;
-  }
+function renderOT(){
+  return `
+    <div class="pill-tabs">
+      <div class="pill active">Ficha</div><div class="pill">Trabajos</div><div class="pill">Pagos</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Datos del cliente</div>
+      <div class="row"><span class="label">Nombre</span><span class="val">Fabiola Fuentes T.</span></div>
+      <div class="row"><span class="label">Teléfono</span><span class="val">+56 8 7463 6398</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Datos del vehículo</div>
+      <div class="row"><span class="label">Patente</span><span class="val">AB-1234</span></div>
+      <div class="row"><span class="label">Marca / Modelo</span><span class="val">Toyota Yaris 2019</span></div>
+    </div>`;
+}
+
+function renderDatos(sub){
+  const compradores = `<div class="card"><div class="row"><span class="label">Comprador 3</span><span class="val">+56 9 4152 9250</span></div></div>`;
+  const proveedores = `<div class="card"><div class="row"><span class="label">Repuestos Sur</span><span class="val">Editar</span></div></div>`;
+  const mecanicos = `<div class="card"><div class="row"><span class="label">Fabiola Fuentes</span><span class="val">bono</span></div><div class="row"><span class="label">Raúl Toranzo</span><span class="val">bono</span></div></div>`;
+  const map = {proveedores, compradores, mecanicos};
+  return `
+    <div class="pill-tabs" id="quoteSubTabs">
+      <div class="pill ${sub==='proveedores'?'active':''}" data-sub="proveedores">Proveedores</div>
+      <div class="pill ${sub==='compradores'?'active':''}" data-sub="compradores">Compradores</div>
+      <div class="pill ${sub==='mecanicos'?'active':''}" data-sub="mecanicos">Mecánicos</div>
+    </div>
+    ${map[sub]}`;
 }
 
 function buildBottomNav(){
-  const app = APPS[currentApp];
-  const iconNavEl = document.getElementById('bottomnav');
-  const segNavWrapTopEl = document.getElementById('segmentnavWrapTop');
-  const orderStripEl = document.getElementById('orderStrip');
-
-  // Ocultar todo primero
-  iconNavEl.style.display = 'none';
-  segNavWrapTopEl.style.display = 'none';
-  orderStripEl.style.display = currentApp === 'ot' ? 'flex' : 'none';
-
-  if(currentApp === 'ot'){
-    segNavWrapTopEl.style.display = 'block';
-
-    const targetSegEl = document.getElementById('segmentnavTop');
-    targetSegEl.innerHTML = app.sections.map(s=>`
-      <div class="seg-item ${s.key===activeSection?'active':''}" data-k="${s.key}">${s.label}</div>`).join('');
-    targetSegEl.querySelectorAll('.seg-item').forEach(item=>{
-      item.addEventListener('click',()=>{activeSection=item.dataset.k; render();});
+  const activeModule = SCREENS[currentScreen].activeModule;
+  const nav = document.getElementById('bottomnav');
+  nav.innerHTML = NAV_ITEMS.map(i => `
+    <button class="bn-item ${i.key===activeModule?'active':''}" data-k="${i.key}">
+      <span class="icon-wrap">${ICONS[i.key]}</span>
+      <span>${i.label}</span>
+    </button>`).join('');
+  nav.querySelectorAll('.bn-item').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      currentScreen = btn.dataset.k==='orders' ? 'home' : 'datos';
+      render();
     });
-  } else {
-    // Módulos independientes -> íconos sueltos, cada uno un destino
-    iconNavEl.style.display = 'flex';
-
-    iconNavEl.innerHTML = app.sections.map(s=>`
-      <div class="bn-item ${s.key===activeSection?'active':''}" data-k="${s.key}">
-        ${ICONS[s.key]}
-        <span>${s.label}</span>
-      </div>`).join('');
-    iconNavEl.querySelectorAll('.bn-item').forEach(item=>{
-      item.addEventListener('click',()=>{
-        if(item.dataset.k === 'buscar'){
-          document.querySelector('#appSwitcher button[data-app="ot"]').click();
-          return;
-        }
-        activeSection=item.dataset.k;
-        render();
-      });
-    });
-  }
+  });
 }
 
 function render(){
   const contentEl = document.getElementById('content');
-  const sub = subPill[activeSection];
+  if(currentScreen === 'home') contentEl.innerHTML = renderHome();
+  else if(currentScreen === 'ot') contentEl.innerHTML = renderOT();
+  else contentEl.innerHTML = renderDatos(quoteSub);
 
-  contentEl.innerHTML = currentApp==='ot'
-    ? renderOTContent(activeSection, sub)
-    : renderDatosContent(activeSection, sub);
-
-  const subTabsEl = document.getElementById('subTabs');
-  if(subTabsEl){
-    subTabsEl.querySelectorAll('.pill').forEach(p=>{
-      p.addEventListener('click',()=>{subPill[activeSection]=p.dataset.sub; render();});
+  const quoteSubTabs = document.getElementById('quoteSubTabs');
+  if(quoteSubTabs){
+    quoteSubTabs.querySelectorAll('.pill').forEach(p=>{
+      p.addEventListener('click', ()=>{ quoteSub = p.dataset.sub; render(); });
     });
   }
 
-  document.getElementById('topSubtitle').textContent = APPS[currentApp].subtitle;
-  document.getElementById('backBtn').style.visibility = 'visible';
+  document.getElementById('topSubtitle').textContent = SCREENS[currentScreen].subtitle;
+
+  const chip = document.getElementById('resumeChip');
+  const showChip = cameFromOrder && currentScreen !== 'ot';
+  chip.classList.toggle('show', showChip);
+  chip.onclick = () => { currentScreen = 'ot'; render(); };
 
   buildBottomNav();
 }
 
-document.getElementById('appSwitcher').addEventListener('click',(e)=>{
+document.getElementById('flowSwitcher').addEventListener('click',(e)=>{
   const btn = e.target.closest('button');
   if(!btn) return;
-  document.querySelectorAll('#appSwitcher button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#flowSwitcher button').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  currentApp = btn.dataset.app;
-  activeSection = APPS[currentApp].defaultSection;
+  cameFromOrder = btn.dataset.flow === 'from-ot';
+  currentScreen = cameFromOrder ? 'ot' : 'home';
   render();
 });
 
-render();
-
-document.getElementById('shareBtn').addEventListener('click', (e)=>{
-  e.stopPropagation();
-  const menu = document.getElementById('shareMenu');
-  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-});
-document.addEventListener('click', ()=>{
-  document.getElementById('shareMenu').style.display = 'none';
-});
-document.getElementById('shareMenu').addEventListener('click', (e)=> e.stopPropagation());
-
 document.getElementById('hamburgerBtn').addEventListener('click', ()=>{
-  document.querySelector('#appSwitcher button[data-app="datos"]').click();
+  alert('Menú hamburguesa: ya no incluye "Gestionar datos" ni "Volver".');
 });
+
+render();
 </script>
 
 </body>
